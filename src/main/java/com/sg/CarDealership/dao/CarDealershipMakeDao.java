@@ -1,12 +1,13 @@
-package com.sg.CarDealership.dao;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
+ */
+package com.sg.cardealership.data;
 
-import java.util.List;
-
-import com.sg.CarDealership.model.Make;
-
+/**
+ *
+ * @author calebdiaz
+ */
 public interface CarDealershipMakeDao {
-	Make addMake(Make make);
-	List<Make> getAllMakes();
-	Make getMakeById(int id);
-
+    
 }

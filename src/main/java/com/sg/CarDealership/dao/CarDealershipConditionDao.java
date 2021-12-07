@@ -1,8 +1,13 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
+ */
 package com.sg.CarDealership.dao;
 
-import ch.qos.logback.core.joran.conditional.Condition;
-
+/**
+ *
+ * @author calebdiaz
+ */
 public interface CarDealershipConditionDao {
-	Condition getConditionById(int id);
-
+    
 }

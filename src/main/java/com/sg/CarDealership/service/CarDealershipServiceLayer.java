@@ -18,6 +18,7 @@ import java.util.List;
  * @author calebdiaz
  */
 public interface CarDealershipServiceLayer {
+<<<<<<< HEAD
     
     List<Vehicle> home();
     List<Vehicle> getVehicles(VehicleQueryContext query);
@@ -40,4 +41,26 @@ public interface CarDealershipServiceLayer {
     List<SalesReport> getSalesReport(ReportQueryContext query);
     List<InventoryReport> getInventoryReport();
     
-}
+=======
+    public List<Vehicle> home();
+    public List<Vehicle> getVehicles(VehicleQueryContext query);
+    public Vehicle getVehicleById(int id);
+    public List<Special> getSpecials();
+    public Contact addContact(Contact contact);
+    public Sale addSale(Sale sale, int vehicleId, int userId);
+    public Vehicle addVehicle(VehicleRequestContext vehicleContext);
+    public boolean editVehicle(VehicleRequestContext vehicleContext);
+    public List<User> getUsers();
+    public User addUser(UserRequestContext userContext);
+    public boolean updateUser(UserRequestContext userContext);
+    public boolean updatePassword(PasswordChangeContext pass);
+    public List<Make> getMakes();
+    public List<Model> getModels();
+    public Make addMake(Make make);
+    public Model addModel(Model model);
+    public Special addSpecial(Special special);
+    public boolean deleteSpecialById(int id);
+    public List<SalesReport> getSalesReport(ReportQueryContext query);
+    public List<InventoryReport> getInventoryReport();
+>>>>>>> 328ddb56eb035c452e6560cb695f79a63c3256f9
+:diffg RE}

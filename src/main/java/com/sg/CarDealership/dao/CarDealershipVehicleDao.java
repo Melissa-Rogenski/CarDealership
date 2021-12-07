@@ -1,15 +1,13 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
+ */
 package com.sg.CarDealership.dao;
 
-import java.util.List;
-
-import com.sg.CarDealership.model.Vehicle;
-import com.sg.CarDealership.service.VehicleQueryContext;
-
+/**
+ *
+ * @author calebdiaz
+ */
 public interface CarDealershipVehicleDao {
-	Vehicle addVehicle(Vehicle vehicle);
-	List<Vehicle> getAllVehicles();
-	List<Vehicle> getAllVehicles(VehicleQueryContext query);
-	Vehicle getVehicleById(int id);
-	boolean updateVehicle(Vehicle vehicle);
-
+    
 }

@@ -1,5 +1,5 @@
 package com.sg.CarDealership.model;
 
-class Condition {
+public class Condition {
 
 }

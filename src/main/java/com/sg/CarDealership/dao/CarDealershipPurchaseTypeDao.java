@@ -4,10 +4,17 @@
  */
 package com.sg.CarDealership.dao;
 
+import com.sg.CarDealership.model.PurchaseType;
+import java.util.List;
+
 /**
  *
  * @author calebdiaz
  */
 public interface CarDealershipPurchaseTypeDao {
-    
+    List<PurchaseType> getAllPurchaseTypes();
+    PurchaseType getPurchaseTypeById(int id);
+    PurchaseType addPurchaseType(PurchaseType purchaseType);
+    void updatePurchaseType(PurchaseType purchaseType);
+    void deletePurchaseTypeById(int id);
 }

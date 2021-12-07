@@ -5,10 +5,38 @@
  */
 package com.sg.CarDealership.dao;
 
+import com.sg.CarDealership.model.Vehicle;
+import java.util.List;
+
 /**
  *
  * @author mroge
  */
 public class CarDealershipVehicleDaoDB implements CarDealershipVehicleDao {
+
+    @Override
+    public List<Vehicle> getAllVehicles() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Vehicle getVehicleById(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Vehicle addVehicle(Vehicle vehicle) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void updateVehicle(Vehicle vehicle) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void deleteVehicleById(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

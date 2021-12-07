@@ -4,10 +4,17 @@
  */
 package com.sg.CarDealership.dao;
 
+import com.sg.CarDealership.model.State;
+import java.util.List;
+
 /**
  *
  * @author calebdiaz
  */
 public interface CarDealershipStateDao {
-    
+    List<State> getAllStates();
+    State getStateById(int id);
+    State addState(State state);
+    void updateState(State state);
+    void deleteStateById(int id);
 }

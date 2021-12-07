@@ -4,10 +4,17 @@
  */
 package com.sg.CarDealership.dao;
 
+import com.sg.CarDealership.model.Model;
+import java.util.List;
+
 /**
  *
  * @author calebdiaz
  */
 public interface CarDealershipModelDao {
-    
+    List<Model> getAllModels();
+    Model getModelById(int id);
+    Model addModel(Model model);
+    void updateModel(Model model);
+    void deleteModelById(int id);
 }

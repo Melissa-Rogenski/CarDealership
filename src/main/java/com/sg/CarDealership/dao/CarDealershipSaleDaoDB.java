@@ -5,10 +5,38 @@
  */
 package com.sg.CarDealership.dao;
 
+import com.sg.CarDealership.model.Sale;
+import java.util.List;
+
 /**
  *
  * @author mroge
  */
 public class CarDealershipSaleDaoDB implements CarDealershipSaleDao {
+
+    @Override
+    public List<Sale> getAllSales() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Sale getSaleById(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Sale addSale(Sale sale) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void updateSale(Sale sale) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void deleteSaleById(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

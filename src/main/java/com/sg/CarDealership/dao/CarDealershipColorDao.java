@@ -4,10 +4,17 @@
  */
 package com.sg.CarDealership.dao;
 
+import com.sg.CarDealership.model.Color;
+import java.util.List;
+
 /**
  *
  * @author calebdiaz
  */
 public interface CarDealershipColorDao {
-    
+    List<Color> getAllColors();
+    Color getColorById(int id);
+    Color addColor(Color color);
+    void updateColor(Color color);
+    void deleteColorById(int id);
 }

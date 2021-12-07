@@ -4,10 +4,17 @@
  */
 package com.sg.CarDealership.dao;
 
+import com.sg.CarDealership.model.Contact;
+import java.util.List;
+
 /**
  *
  * @author calebdiaz
  */
 public interface CarDealershipContactDao {
-    
+    List<Contact> getAllContacts();
+    Contact getContactById(int id);
+    Contact addContact(Contact contact);
+    void updateContact(Contact contact);
+    void deleteContactById(int id);
 }

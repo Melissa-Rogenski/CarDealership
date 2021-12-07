@@ -10,4 +10,25 @@ package com.sg.CarDealership.service;
  */
 public class PasswordChangeContext {
     
+    private String password;
+    private String confirmation;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getConfirmation() {
+        return confirmation;
+    }
+
+    public void setConfirmation(String confirmation) {
+        this.confirmation = confirmation;
+    }
+
+    
 }
+

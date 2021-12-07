@@ -4,10 +4,40 @@
  */
 package com.sg.CarDealership.service;
 
+import com.sg.CarDealership.model.Contact;
+import com.sg.CarDealership.model.Make;
+import com.sg.CarDealership.model.Model;
+import com.sg.CarDealership.model.Sale;
+import com.sg.CarDealership.model.Special;
+import com.sg.CarDealership.model.User;
+import com.sg.CarDealership.model.Vehicle;
+import java.util.List;
+
 /**
  *
  * @author calebdiaz
  */
 public interface CarDealershipServiceLayer {
+    
+    List<Vehicle> home();
+    List<Vehicle> getVehicles(VehicleQueryContext query);
+    Vehicle getVehicleById(int id);
+    List<Special> getSpecials();
+    Contact addContact(Contact contact);
+    Sale addSale(Sale sale, int vehicleId, int userId);
+    Vehicle addVehicle(VehicleRequestContext vehicleContext);
+    boolean editVehicle(VehicleRequestContext vehicleContext);
+    List<User> getUsers();
+    User addUser(UserRequestContext userContext);
+    boolean updateUser(UserRequestContext userContext);
+    boolean updatePassword(PasswordChangeContext pass);
+    List<Make> getMakes();
+    List<Model> getModels();
+    Make addMake(Make make);
+    Model addModel(Model model);
+    Special addSpecial(Special special);
+    boolean deleteSpecialById(int id);
+    List<SalesReport> getSalesReport(ReportQueryContext query);
+    List<InventoryReport> getInventoryReport();
     
 }

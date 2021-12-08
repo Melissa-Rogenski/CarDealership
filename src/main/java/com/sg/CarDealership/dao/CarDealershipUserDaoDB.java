@@ -51,7 +51,7 @@ public class CarDealershipUserDaoDB implements CarDealershipUserDao {
     @Override
     public List<User> getAllUsers() {
         final String SELECT_ALL_USERS = "SELECT * FROM user";
-        List<User> users = jdbc.query(SELECT_ALL_USERS, new CarDealershipUserDaoDB.UserMapper());
+        List<User> users = jdbc.query(SELECT_ALL_USERS, new UserMapper());
         
         addRoleToUsers(users);
         
@@ -69,7 +69,7 @@ public class CarDealershipUserDaoDB implements CarDealershipUserDao {
         try {
             final String SELECT_USER_BY_ID = "SELECT * FROM user WHERE id = ?";
             User user = jdbc.queryForObject(SELECT_USER_BY_ID, 
-                    new CarDealershipUserDaoDB.UserMapper(), id);
+                    new UserMapper(), id);
             user.setRole(getRoleForUser(user));
             return user;
         } catch(DataAccessException ex) {

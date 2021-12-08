@@ -39,14 +39,14 @@ public class CarDealershipColorDaoDB implements CarDealershipColorDao {
     @Override
     public List<Color> getAllColors() {
         final String SELECT_ALL_COLORS = "SELECT * FROM color";
-        return jdbc.query(SELECT_ALL_COLORS, new CarDealershipColorDaoDB.ColorMapper());
+        return jdbc.query(SELECT_ALL_COLORS, new ColorMapper());
     }
 
     @Override
     public Color getColorById(int id) {
         try {
             final String SELECT_COLOR_BY_ID = "SELECT * FROM color WHERE id = ?";
-            return jdbc.queryForObject(SELECT_COLOR_BY_ID, new CarDealershipColorDaoDB.ColorMapper(), id);
+            return jdbc.queryForObject(SELECT_COLOR_BY_ID, new ColorMapper(), id);
         } catch(DataAccessException ex) {
             return null;
         }    

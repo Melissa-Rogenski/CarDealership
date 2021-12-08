@@ -39,14 +39,14 @@ public class CarDealershipInteriorDaoDB implements CarDealershipInteriorDao {
     @Override
     public List<Interior> getAllInteriors() {
         final String SELECT_ALL_INTERIORS = "SELECT * FROM interior";
-        return jdbc.query(SELECT_ALL_INTERIORS, new CarDealershipInteriorDaoDB.InteriorMapper());
+        return jdbc.query(SELECT_ALL_INTERIORS, new InteriorMapper());
     }
 
     @Override
     public Interior getInteriorById(int id) {
         try {
             final String SELECT_INTERIOR_BY_ID = "SELECT * FROM interior WHERE id = ?";
-            return jdbc.queryForObject(SELECT_INTERIOR_BY_ID, new CarDealershipInteriorDaoDB.InteriorMapper(), id);
+            return jdbc.queryForObject(SELECT_INTERIOR_BY_ID, new InteriorMapper(), id);
         } catch(DataAccessException ex) {
             return null;
         }

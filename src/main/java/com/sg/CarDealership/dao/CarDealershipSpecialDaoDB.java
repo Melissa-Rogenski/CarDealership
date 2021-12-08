@@ -5,7 +5,6 @@
  */
 package com.sg.CarDealership.dao;
 
-import com.sg.CarDealership.model.Condition;
 import com.sg.CarDealership.model.Special;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -41,14 +40,14 @@ public class CarDealershipSpecialDaoDB implements CarDealershipSpecialDao {
     @Override
     public List<Special> getAllSpecials() {
         final String SELECT_ALL_SPECIALS = "SELECT * FROM special";
-        return jdbc.query(SELECT_ALL_SPECIALS, new CarDealershipSpecialDaoDB.SpecialMapper());
+        return jdbc.query(SELECT_ALL_SPECIALS, new SpecialMapper());
     }
 
     @Override
     public Special getSpecialById(int id) {
         try {
             final String SELECT_SPECIAL_BY_ID = "SELECT * FROM special WHERE id = ?";
-            return jdbc.queryForObject(SELECT_SPECIAL_BY_ID, new CarDealershipSpecialDaoDB.SpecialMapper(), id);
+            return jdbc.queryForObject(SELECT_SPECIAL_BY_ID, new SpecialMapper(), id);
         } catch(DataAccessException ex) {
             return null;
         }

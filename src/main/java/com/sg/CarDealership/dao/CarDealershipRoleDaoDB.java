@@ -5,7 +5,6 @@
  */
 package com.sg.CarDealership.dao;
 
-import com.sg.CarDealership.model.Condition;
 import com.sg.CarDealership.model.Role;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -40,14 +39,14 @@ public class CarDealershipRoleDaoDB implements CarDealershipRoleDao {
     @Override
     public List<Role> getAllRoles() {
         final String SELECT_ALL_ROLES = "SELECT * FROM role";
-        return jdbc.query(SELECT_ALL_ROLES, new CarDealershipRoleDaoDB.RoleMapper());
+        return jdbc.query(SELECT_ALL_ROLES, new RoleMapper());
     }
 
     @Override
     public Role getRoleById(int id) {
     try {
             final String SELECT_ROLE_BY_ID = "SELECT * FROM role WHERE id = ?";
-            return jdbc.queryForObject(SELECT_ROLE_BY_ID, new CarDealershipRoleDaoDB.RoleMapper(), id);
+            return jdbc.queryForObject(SELECT_ROLE_BY_ID, new RoleMapper(), id);
         } catch(DataAccessException ex) {
             return null;
         }

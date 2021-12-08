@@ -44,14 +44,14 @@ public class CarDealershipModelDaoDB implements CarDealershipModelDao {
     
     private User getUserForModel(Model model) {
         final String SELECT_USER_FOR_MODEL = "SELECT u.* FROM user u "
-                + "JOIN model m ON u.id = m.modelId WHERE m.id = ?";
+                + "JOIN model m ON u.id = m.userId WHERE m.id = ?";
         return jdbc.queryForObject(SELECT_USER_FOR_MODEL, new UserMapper(), 
                 model.getModelId());
     }
     
     private Make getMakeForModel(Model model) {
         final String SELECT_MAKE_FOR_MODEL = "SELECT ma.* FROM make ma "
-                + "JOIN model mo ON ma.id = mo.modelId WHERE mo.id = ?";
+                + "JOIN model mo ON ma.id = mo.makeId WHERE mo.id = ?";
         return jdbc.queryForObject(SELECT_MAKE_FOR_MODEL, new MakeMapper(), 
                 model.getModelId());
     }

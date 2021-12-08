@@ -42,14 +42,14 @@ public class CarDealershipContactDaoDB implements CarDealershipContactDao {
     @Override
     public List<Contact> getAllContacts() {
         final String SELECT_ALL_CONTACTS = "SELECT * FROM contact";
-        return jdbc.query(SELECT_ALL_CONTACTS, new CarDealershipContactDaoDB.ContactMapper());
+        return jdbc.query(SELECT_ALL_CONTACTS, new ContactMapper());
     }
 
     @Override
     public Contact getContactById(int id) {
         try {
             final String SELECT_CONTACT_BY_ID = "SELECT * FROM contact WHERE id = ?";
-            return jdbc.queryForObject(SELECT_CONTACT_BY_ID, new CarDealershipContactDaoDB.ContactMapper(), id);
+            return jdbc.queryForObject(SELECT_CONTACT_BY_ID, new ContactMapper(), id);
         } catch(DataAccessException ex) {
             return null;
         }

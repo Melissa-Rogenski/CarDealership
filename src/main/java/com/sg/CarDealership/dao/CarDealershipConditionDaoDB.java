@@ -39,14 +39,14 @@ public class CarDealershipConditionDaoDB implements CarDealershipConditionDao {
     @Override
     public List<Condition> getAllConditions() {
         final String SELECT_ALL_CONDITIONS = "SELECT * FROM condition";
-        return jdbc.query(SELECT_ALL_CONDITIONS, new CarDealershipConditionDaoDB.ConditionMapper());
+        return jdbc.query(SELECT_ALL_CONDITIONS, new ConditionMapper());
     }
 
     @Override
     public Condition getConditionById(int id) {
         try {
             final String SELECT_CONDITION_BY_ID = "SELECT * FROM condition WHERE id = ?";
-            return jdbc.queryForObject(SELECT_CONDITION_BY_ID, new CarDealershipConditionDaoDB.ConditionMapper(), id);
+            return jdbc.queryForObject(SELECT_CONDITION_BY_ID, new ConditionMapper(), id);
         } catch(DataAccessException ex) {
             return null;
         }

@@ -39,14 +39,14 @@ public class CarDealershipTransDaoDB implements CarDealershipTransDao {
     @Override
     public List<Trans> getAllTrans() {
         final String SELECT_ALL_TRANS = "SELECT * FROM trans";
-        return jdbc.query(SELECT_ALL_TRANS, new CarDealershipTransDaoDB.TransMapper());
+        return jdbc.query(SELECT_ALL_TRANS, new TransMapper());
     }
 
     @Override
     public Trans getTransById(int id) {
         try {
             final String SELECT_TRANS_BY_ID = "SELECT * FROM trans WHERE id = ?";
-            return jdbc.queryForObject(SELECT_TRANS_BY_ID, new CarDealershipTransDaoDB.TransMapper(), id);
+            return jdbc.queryForObject(SELECT_TRANS_BY_ID, new TransMapper(), id);
         } catch(DataAccessException ex) {
             return null;
         }

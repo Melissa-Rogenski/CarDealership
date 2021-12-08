@@ -39,14 +39,14 @@ public class CarDealershipPurchaseTypeDaoDB implements CarDealershipPurchaseType
     @Override
     public List<PurchaseType> getAllPurchaseTypes() {
         final String SELECT_ALL_PURCHASETYPES = "SELECT * FROM purchaseType";
-        return jdbc.query(SELECT_ALL_PURCHASETYPES, new CarDealershipPurchaseTypeDaoDB.PurchaseTypeMapper());
+        return jdbc.query(SELECT_ALL_PURCHASETYPES, new PurchaseTypeMapper());
     }
 
     @Override
     public PurchaseType getPurchaseTypeById(int id) {
         try {
             final String SELECT_PURCHASETYPE_BY_ID = "SELECT * FROM purchaseType WHERE id = ?";
-            return jdbc.queryForObject(SELECT_PURCHASETYPE_BY_ID, new CarDealershipPurchaseTypeDaoDB.PurchaseTypeMapper(), id);
+            return jdbc.queryForObject(SELECT_PURCHASETYPE_BY_ID, new PurchaseTypeMapper(), id);
         } catch(DataAccessException ex) {
             return null;
         }

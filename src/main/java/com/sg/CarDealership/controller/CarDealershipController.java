@@ -50,7 +50,7 @@ public class CarDealershipController {
     
     @GetMapping("/home/index")
     public List<Vehicle> home(){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return service.home();
     }
     
     @GetMapping("/inventory/new")
@@ -62,7 +62,7 @@ public class CarDealershipController {
     public ResponseEntity<List<Vehicle>> getUsedVehicles(@RequestBody VehicleQueryContext query){
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+   
     @GetMapping("/inventory/details/{id}")
     public ResponseEntity<Vehicle> getVehicleById(@PathVariable int id){
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

@@ -193,7 +193,7 @@ public class CarDealershipVehicleDaoDB implements CarDealershipVehicleDao {
     
     private Condition getConditionForVehicle(Vehicle vehicle){
         final String SELECT_CONDITION_FOR_VEHICLE = "SELECT c.* FROM condition c "
-                + "JOIN vehicle v ON c.id = v.conditionId WHERE c.id = ?";
+                + "JOIN vehicle v ON c.id = v.conditionId WHERE v.id = ?";
         return jdbcTemplate.queryForObject(SELECT_CONDITION_FOR_VEHICLE, new ConditionMapper(), 
                 vehicle.getVehicleId());
     }

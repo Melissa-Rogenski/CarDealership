@@ -5,38 +5,85 @@
  */
 package com.sg.CarDealership.dao;
 
+import com.sg.CarDealership.model.Color;
 import com.sg.CarDealership.model.Condition;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author mroge
  */
+@Repository
 public class CarDealershipConditionDaoDB implements CarDealershipConditionDao {
 
+    @Autowired
+    JdbcTemplate jdbc;
+    public static final class ConditionMapper implements RowMapper<Condition> {
+
+        @Override
+        public Condition mapRow(ResultSet rs, int index) throws SQLException {
+            Condition c = new Condition();
+            c.setConditionId(rs.getInt("id"));
+            c.setCondition(rs.getString("condition"));
+            return c;
+        }
+    }
+    
     @Override
     public List<Condition> getAllConditions() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        final String SELECT_ALL_CONDITIONS = "SELECT * FROM condition";
+        return jdbc.query(SELECT_ALL_CONDITIONS, new CarDealershipConditionDaoDB.ConditionMapper());
     }
 
     @Override
     public Condition getConditionById(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            final String SELECT_CONDITION_BY_ID = "SELECT * FROM condition WHERE id = ?";
+            return jdbc.queryForObject(SELECT_CONDITION_BY_ID, new CarDealershipConditionDaoDB.ConditionMapper(), id);
+        } catch(DataAccessException ex) {
+            return null;
+        }
     }
 
     @Override
+    @Transactional
     public Condition addCondition(Condition condition) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        final String INSERT_CONDITION = "INSERT INTO condition(condition) "
+                + "VALUES(?)";
+        jdbc.update(INSERT_CONDITION, 
+                condition.getCondition());
+        int newId = jdbc.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
+        condition.setConditionId(newId);
+        return condition;
     }
 
     @Override
     public boolean updateCondition(Condition condition) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        final String UPDATE_CONDITION = "UPDATE condition SET condition = ?"
+                + "WHERE id = ?";
+        jdbc.update(UPDATE_CONDITION,
+                condition.getCondition(),
+                condition.getConditionId());
+        return true;
     }
 
     @Override
+    @Transactional
     public void deleteConditionById(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        final String DELETE_VEHICLE_CONDITION = "DELETE FROM condition "
+                + "WHERE conditionId = ?";
+        jdbc.update(DELETE_VEHICLE_CONDITION, id);
+        
+        final String DELETE_CONDITION = "DELETE FROM condition WHERE id = ?";
+        jdbc.update(DELETE_CONDITION, id);
     }
     
 }

@@ -6,37 +6,83 @@
 package com.sg.CarDealership.dao;
 
 import com.sg.CarDealership.model.Interior;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author mroge
  */
+@Repository
 public class CarDealershipInteriorDaoDB implements CarDealershipInteriorDao {
 
+    @Autowired
+    JdbcTemplate jdbc;
+    public static final class InteriorMapper implements RowMapper<Interior> {
+
+        @Override
+        public Interior mapRow(ResultSet rs, int index) throws SQLException {
+            Interior i = new Interior();
+            i.setInteriorId(rs.getInt("id"));
+            i.setInterior(rs.getString("interior"));
+            return i;
+        }
+    }
+    
     @Override
     public List<Interior> getAllInteriors() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        final String SELECT_ALL_INTERIORS = "SELECT * FROM interior";
+        return jdbc.query(SELECT_ALL_INTERIORS, new CarDealershipInteriorDaoDB.InteriorMapper());
     }
 
     @Override
     public Interior getInteriorById(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            final String SELECT_INTERIOR_BY_ID = "SELECT * FROM interior WHERE id = ?";
+            return jdbc.queryForObject(SELECT_INTERIOR_BY_ID, new CarDealershipInteriorDaoDB.InteriorMapper(), id);
+        } catch(DataAccessException ex) {
+            return null;
+        }
     }
 
     @Override
+    @Transactional
     public Interior addInterior(Interior interior) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        final String INSERT_INTERIOR = "INSERT INTO interior(interior) "
+                + "VALUES(?)";
+        jdbc.update(INSERT_INTERIOR, 
+                interior.getInterior());
+        int newId = jdbc.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
+        interior.setInteriorId(newId);
+        return interior;
     }
 
     @Override
     public boolean updateInterior(Interior interior) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        final String UPDATE_INTERIOR = "UPDATE interior SET interior = ?"
+                + "WHERE id = ?";
+        jdbc.update(UPDATE_INTERIOR,
+                interior.getInterior(),
+                interior.getInteriorId());
+        return true;
     }
 
     @Override
+    @Transactional
     public void deleteInteriorById(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        final String DELETE_VEHICLE_INTERIOR = "DELETE FROM vehicle "
+                + "WHERE interiorId = ?";
+        jdbc.update(DELETE_VEHICLE_INTERIOR, id);
+        
+        final String DELETE_INTERIOR = "DELETE FROM interior WHERE id = ?";
+        jdbc.update(DELETE_INTERIOR, id);
     }
     
 }

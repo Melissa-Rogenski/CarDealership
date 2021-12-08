@@ -77,7 +77,7 @@ public class CarDealershipConditionDaoDB implements CarDealershipConditionDao {
     @Override
     @Transactional
     public void deleteConditionById(int id) {
-        final String DELETE_VEHICLE_CONDITION = "DELETE FROM condition "
+        final String DELETE_VEHICLE_CONDITION = "DELETE FROM vehicle "
                 + "WHERE conditionId = ?";
         jdbc.update(DELETE_VEHICLE_CONDITION, id);
         

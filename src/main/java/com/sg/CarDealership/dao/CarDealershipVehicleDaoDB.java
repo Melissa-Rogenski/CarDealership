@@ -5,9 +5,32 @@
  */
 package com.sg.CarDealership.dao;
 
+import com.sg.CarDealership.dao.CarDealershipBodyStyleDaoDB.BodyStyleMapper;
+import com.sg.CarDealership.dao.CarDealershipColorDaoDB.ColorMapper;
+import com.sg.CarDealership.dao.CarDealershipConditionDaoDB.ConditionMapper;
+import com.sg.CarDealership.dao.CarDealershipInteriorDaoDB.InteriorMapper;
+import com.sg.CarDealership.dao.CarDealershipMakeDaoDB.MakeMapper;
+import com.sg.CarDealership.dao.CarDealershipModelDaoDB.ModelMapper;
+import com.sg.CarDealership.dao.CarDealershipTransDaoDB.TransMapper;
+import com.sg.CarDealership.model.BodyStyle;
+import com.sg.CarDealership.model.Color;
+import com.sg.CarDealership.model.Condition;
+import com.sg.CarDealership.model.Interior;
+import com.sg.CarDealership.model.Make;
+import com.sg.CarDealership.model.Model;
+import com.sg.CarDealership.model.Trans;
 import com.sg.CarDealership.model.Vehicle;
 import com.sg.CarDealership.service.VehicleQueryContext;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 
 /**
  *
@@ -15,34 +38,199 @@ import java.util.List;
  */
 public class CarDealershipVehicleDaoDB implements CarDealershipVehicleDao {
 
+    @Autowired
+    private final JdbcTemplate jdbcTemplate;
+    
+    public CarDealershipVehicleDaoDB(JdbcTemplate jdbcTemplate){
+        this.jdbcTemplate = jdbcTemplate;
+    }
+    
     @Override
     public List<Vehicle> getAllVehicles() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        final String SELECT_ALL_VEHICLES = "SELECT * FROM vehicle";
+        List<Vehicle> vehicles = jdbcTemplate.query(SELECT_ALL_VEHICLES, new VehicleMapper());
+        
+        vehicles.stream()
+                .forEach((v) -> addFieldsToVehicle(v));
+        
+        return vehicles;
     }
+    
+    @Override
+    public List<Vehicle> getAllVehicles(VehicleQueryContext query) {
+        final String SELECT_ALL_VEHICLES_BY_QUERY = "SELECT * FROM vehicle "
+                + "JOIN make m ON (m.make LIKE ? AND m.Id = vehicle.makeId) "
+                + "JOIN model mo ON (mo.model LIKE ? AND mo.Id = vehicle.modelId) "
+                + "WHERE (year BETWEEN ? AND ? )"
+                + "AND (msrp BETWEEN ? AND ? )"
+                + "AND (conditionId = ? )";
+        List<Vehicle> vehicles = jdbcTemplate.query(SELECT_ALL_VEHICLES_BY_QUERY, new VehicleMapper(),
+                "%"+query.getSearchBar()+"%", "%"+query.getSearchBar()+"%", query.getMinYear(), query.getMaxYear(), 
+                query.getMinPrice(), query.getMaxPrice(), query.getConditionId());
+        
+        vehicles.stream()
+                .forEach((v) -> addFieldsToVehicle(v));
+        
+        return vehicles;
+    }
+
 
     @Override
     public Vehicle getVehicleById(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        final String SELECT_VEHICLE_BY_ID = "SELECT * FROM vehicle WHERE id = ?;";
+        Vehicle vehicle = jdbcTemplate.queryForObject(SELECT_VEHICLE_BY_ID, new VehicleMapper(), id);
+        
+        addFieldsToVehicle(vehicle);
+        return vehicle;
     }
 
     @Override
     public Vehicle addVehicle(Vehicle vehicle) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        final String sql = "INSERT INTO vehicle(year, salePrice, msrp, mileage, vin, description"
+                + "picture, purchased, featured, makeId, modelId, conditionId, bodyStyleId,"
+                + "interiorId, transId, colorId) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update((Connection conn) -> {
+
+            PreparedStatement statement = conn.prepareStatement(
+                sql, 
+                Statement.RETURN_GENERATED_KEYS);
+
+            statement.setObject(1, vehicle.getYear());
+            statement.setBigDecimal(2, vehicle.getSalePrice());
+            statement.setBigDecimal(3, vehicle.getMSRP());
+            statement.setInt(4, vehicle.getMileage());
+            statement.setString(5, vehicle.getVin());
+            statement.setString(6, vehicle.getDescription());
+            statement.setString(7, vehicle.getPicturePath());
+            statement.setBoolean(8, vehicle.isPurchased());
+            statement.setBoolean(9, vehicle.isFeatured());
+            statement.setInt(10, vehicle.getMake().getMakeId());
+            statement.setInt(11, vehicle.getModel().getModelId());
+            statement.setInt(12, vehicle.getCondition().getConditionId());
+            statement.setInt(13, vehicle.getBodyStyle().getBodyStyleId());
+            statement.setInt(14, vehicle.getInterior().getInteriorId());
+            statement.setInt(15, vehicle.getTrans().getTransId());
+            statement.setInt(16, vehicle.getColor().getColorId());
+            
+            return statement;
+
+        }, keyHolder);
+
+        vehicle.setVehicleId(keyHolder.getKey().intValue());
+
+        return vehicle;
     }
 
     @Override
     public void deleteVehicleById(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+        final String DELETE_SALE_VEHICLE = "DELETE FROM sale "
+                + "WHERE vehicleId = ?";
+        jdbcTemplate.update(DELETE_SALE_VEHICLE, id);
 
-    @Override
-    public List<Vehicle> getAllVehicles(VehicleQueryContext query) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        final String DELETE_VEHICLE = "DELETE FROM vehicle WHERE id = ?";
+        jdbcTemplate.update(DELETE_VEHICLE, id);
     }
 
     @Override
     public boolean updateVehicle(Vehicle vehicle) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        final String sql = "UPDATE vehicle SET"
+                + "year = ?, salePrice = ?, msrp = ?, mileage = ?, vin = ?, description = ?,"
+                + "picture = ?, purchased = ?, featured = ?, makeId = ?, modelId = ?,"
+                + "conditionId = ?, bodyStyleId = ?, interiorId = ?, transId = ?, colorId = ?"
+                + "WHERE id = ?;";
+        
+        return jdbcTemplate.update(sql,
+                vehicle.getYear(), vehicle.getSalePrice(), vehicle.getMSRP(), vehicle.getMileage(), vehicle.getVin(),
+                vehicle.getDescription(), vehicle.getPicturePath(), vehicle.isPurchased(), vehicle.isFeatured(),
+                vehicle.getMake().getMakeId(), vehicle.getModel().getModelId(), vehicle.getCondition().getConditionId(),
+                vehicle.getBodyStyle().getBodyStyleId(), vehicle.getInterior().getInteriorId(), vehicle.getTrans().getTransId(),
+                vehicle.getColor().getColorId(), vehicle.getVehicleId()) > 0;
+        
     }
+    
+    // Public mapper
+    public static final class VehicleMapper implements RowMapper<Vehicle>{
+
+        @Override
+        public Vehicle mapRow(ResultSet rs, int index) throws SQLException {
+            Vehicle vehicle = new Vehicle();
+            vehicle.setVehicleId(rs.getInt("id"));
+            vehicle.setYear(rs.getDate("year").toLocalDate());
+            vehicle.setSalePrice(rs.getBigDecimal("salePrice"));
+            vehicle.setMSRP(rs.getBigDecimal("msrp"));
+            vehicle.setVin(rs.getString("vin"));
+            vehicle.setDescription(rs.getString("description"));
+            vehicle.setPicturePath(rs.getString("picture"));
+            vehicle.setPurchased(rs.getBoolean("purchased"));
+            vehicle.setFeatured(rs.getBoolean("featured"));
+  
+            return vehicle;
+        }
+    
+    }
+    
+    // Private helper methods
+    
+    private Make getMakeForVehicle(Vehicle vehicle){
+        final String SELECT_MAKE_FOR_VEHICLE = "SELECT m.* FROM make m "
+                + "JOIN vehicle v ON m.id = v.makeId WHERE v.id = ?";
+        return jdbcTemplate.queryForObject(SELECT_MAKE_FOR_VEHICLE, new MakeMapper(), 
+                vehicle.getVehicleId());
+    }
+    
+    private Model getModelForVehicle(Vehicle vehicle){
+        final String SELECT_MODEL_FOR_VEHICLE = "SELECT m.* FROM model m "
+                + "JOIN vehicle v ON m.id = v.modelId WHERE v.id = ?";
+        return jdbcTemplate.queryForObject(SELECT_MODEL_FOR_VEHICLE, new ModelMapper(), 
+                vehicle.getVehicleId());
+    }
+    
+    private Condition getConditionForVehicle(Vehicle vehicle){
+        final String SELECT_CONDITION_FOR_VEHICLE = "SELECT c.* FROM condition c "
+                + "JOIN vehicle v ON c.id = v.conditionId WHERE c.id = ?";
+        return jdbcTemplate.queryForObject(SELECT_CONDITION_FOR_VEHICLE, new ConditionMapper(), 
+                vehicle.getVehicleId());
+    }
+    
+    private BodyStyle getBodyStyleForVehicle(Vehicle vehicle){
+        final String SELECT_BODYSTYLE_FOR_VEHICLE = "SELECT b.* FROM bodyStyle b "
+                + "JOIN vehicle v ON b.id = v.bodyStyleId WHERE v.id = ?";
+        return jdbcTemplate.queryForObject(SELECT_BODYSTYLE_FOR_VEHICLE, new BodyStyleMapper(), 
+                vehicle.getVehicleId());
+    }
+    
+    private Interior getInteriorForVehicle(Vehicle vehicle){
+        final String SELECT_INTERIOR_FOR_VEHICLE = "SELECT i.* FROM interior i "
+                + "JOIN vehicle v ON i.id = v.interiorId WHERE v.id = ?";
+        return jdbcTemplate.queryForObject(SELECT_INTERIOR_FOR_VEHICLE, new InteriorMapper(), 
+                vehicle.getVehicleId());
+    }
+    
+    private Trans getTransForVehicle(Vehicle vehicle){
+        final String SELECT_TRANS_FOR_VEHICLE = "SELECT t.* FROM trans t "
+                + "JOIN vehicle v ON m.id = v.transId WHERE v.id = ?";
+        return jdbcTemplate.queryForObject(SELECT_TRANS_FOR_VEHICLE, new TransMapper(), 
+                vehicle.getVehicleId());
+    }
+    
+    private Color getColorForVehicle(Vehicle vehicle){
+        final String SELECT_COLOR_FOR_VEHICLE = "SELECT c.* FROM color c "
+                + "JOIN vehicle v ON m.id = v.colorId WHERE v.id = ?";
+        return jdbcTemplate.queryForObject(SELECT_COLOR_FOR_VEHICLE, new ColorMapper(), 
+                vehicle.getVehicleId());
+    }
+    
+    private void addFieldsToVehicle(Vehicle v){
+        v.setMake(getMakeForVehicle(v));
+        v.setModel(getModelForVehicle(v));
+        v.setCondition(getConditionForVehicle(v));
+        v.setBodyStyle(getBodyStyleForVehicle(v));
+        v.setInterior(getInteriorForVehicle(v));
+        v.setTrans(getTransForVehicle(v));
+        v.setColor(getColorForVehicle(v));
+    }
+
     
 }

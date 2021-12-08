@@ -1,12 +1,13 @@
 package com.sg.CarDealership.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Vehicle {
     private int vehicleId;
-    private LocalDateTime year;
+    private LocalDate year;
     private BigDecimal salePrice;
     private BigDecimal MSRP;
     private int mileage;
@@ -31,11 +32,11 @@ public class Vehicle {
         this.vehicleId = vehicleId;
     }
 
-    public LocalDateTime getYear() {
+    public LocalDate getYear() {
         return year;
     }
 
-    public void setYear(LocalDateTime year) {
+    public void setYear(LocalDate year) {
         this.year = year;
     }
 

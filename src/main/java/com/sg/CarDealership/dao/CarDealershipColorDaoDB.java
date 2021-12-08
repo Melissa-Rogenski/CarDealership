@@ -5,15 +5,16 @@
  */
 package com.sg.CarDealership.dao;
 
-import com.sg.CarDealership.model.BodyStyle;
 import com.sg.CarDealership.model.Color;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -37,27 +38,51 @@ public class CarDealershipColorDaoDB implements CarDealershipColorDao {
     
     @Override
     public List<Color> getAllColors() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        final String SELECT_ALL_COLORS = "SELECT * FROM color";
+        return jdbc.query(SELECT_ALL_COLORS, new CarDealershipColorDaoDB.ColorMapper());
     }
 
     @Override
     public Color getColorById(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            final String SELECT_COLOR_BY_ID = "SELECT * FROM color WHERE id = ?";
+            return jdbc.queryForObject(SELECT_COLOR_BY_ID, new CarDealershipColorDaoDB.ColorMapper(), id);
+        } catch(DataAccessException ex) {
+            return null;
+        }    
     }
 
     @Override
+    @Transactional
     public Color addColor(Color color) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        final String INSERT_COLOR = "INSERT INTO color(color) "
+                + "VALUES(?)";
+        jdbc.update(INSERT_COLOR, 
+                color.getColor());
+        int newId = jdbc.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
+        color.setColorId(newId);
+        return color;
     }
 
     @Override
     public boolean updateColor(Color color) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        final String UPDATE_COLOR = "UPDATE color SET color = ?"
+                + "WHERE id = ?";
+        jdbc.update(UPDATE_COLOR,
+                color.getColor(),
+                color.getColorId());
+        return true;
     }
 
     @Override
+    @Transactional
     public void deleteColorById(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        final String DELETE_VEHICLE_COLOR = "DELETE FROM vehicle "
+                + "WHERE colorId = ?";
+        jdbc.update(DELETE_VEHICLE_COLOR, id);
+        
+        final String DELETE_COLOR = "DELETE FROM color WHERE id = ?";
+        jdbc.update(DELETE_COLOR, id);
     }
     
 }

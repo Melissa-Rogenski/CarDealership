@@ -67,7 +67,12 @@ public class CarDealershipController {
     
     @GetMapping("/inventory/used")
     public ResponseEntity<List<Vehicle>> getUsedVehicles(@RequestBody VehicleQueryContext query){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        query.setConditionId(Condition.USED);
+        List<Vehicle> results = service.getVehicles(query);
+        if (results == null) {
+            return new ResponseEntity("There was an error processing your request.", HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+        return ResponseEntity.ok(results);
     }
    
     @GetMapping("/inventory/details/{id}")

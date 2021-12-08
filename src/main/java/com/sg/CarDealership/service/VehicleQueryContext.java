@@ -6,6 +6,7 @@ package com.sg.CarDealership.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -14,9 +15,9 @@ import java.time.LocalDate;
 public class VehicleQueryContext {
     
     private String searchBar = "";
-    private LocalDate maxYear = LocalDate.MAX;
-    private LocalDate minYear = LocalDate.MIN;
-    private BigDecimal minPrice = BigDecimal.ZERO;
+    private LocalDateTime minYear = LocalDateTime.parse("1970-01-01T00:00:02");
+    private LocalDateTime maxYear = LocalDateTime.parse("2038-01-19T03:14:00");
+    private BigDecimal minPrice = new BigDecimal("0");
     private BigDecimal maxPrice = new BigDecimal("1000000000");
     private int conditionId;
     private boolean featured;
@@ -30,19 +31,19 @@ public class VehicleQueryContext {
         this.searchBar = searchBar;
     }
 
-    public LocalDate getMaxYear() {
+    public LocalDateTime getMaxYear() {
         return maxYear;
     }
 
-    public void setMaxYear(LocalDate maxYear) {
+    public void setMaxYear(LocalDateTime maxYear) {
         this.maxYear = maxYear;
     }
 
-    public LocalDate getMinYear() {
+    public LocalDateTime getMinYear() {
         return minYear;
     }
 
-    public void setMinYear(LocalDate minYear) {
+    public void setMinYear(LocalDateTime minYear) {
         this.minYear = minYear;
     }
 

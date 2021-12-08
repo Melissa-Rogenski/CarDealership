@@ -350,9 +350,9 @@ public class CarDealershipServiceLayerImpl implements CarDealershipServiceLayer 
     
     private void validateVehicleRequest(VehicleRequestContext request) throws InvalidVehicleException {
         // Validate Date
-        LocalDate date = request.getYear();
-        LocalDate minDate = LocalDate.parse("2000-01-01");
-        LocalDate maxDate = LocalDate.now().plusYears(1);
+        LocalDateTime date = request.getYear();
+        LocalDateTime minDate = LocalDateTime.parse("2000-01-01");
+        LocalDateTime maxDate = LocalDateTime.now().plusYears(1);
         
         if(date.compareTo(minDate) < 0 || date.compareTo(maxDate) > 0){
             throw new InvalidVehicleException("Vehicle is not in valid date range. Cannot add or edit vehicle.");

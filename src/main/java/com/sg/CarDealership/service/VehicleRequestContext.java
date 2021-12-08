@@ -6,6 +6,7 @@ package com.sg.CarDealership.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -14,7 +15,7 @@ import java.time.LocalDate;
 public class VehicleRequestContext {
     
     private int vehicleId;
-    private LocalDate year;
+    private LocalDateTime year;
     private BigDecimal salePrice;
     private BigDecimal MSRP;
     private int mileage;
@@ -37,11 +38,11 @@ public class VehicleRequestContext {
         this.vehicleId = vehicleId;
     }
 
-    public LocalDate getYear() {
+    public LocalDateTime getYear() {
         return year;
     }
 
-    public void setYear(LocalDate year) {
+    public void setYear(LocalDateTime year) {
         this.year = year;
     }
 

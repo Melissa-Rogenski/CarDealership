@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class Vehicle {
     private int vehicleId;
-    private LocalDate year;
+    private LocalDateTime year;
     private BigDecimal salePrice;
     private BigDecimal MSRP;
     private int mileage;
@@ -32,11 +32,11 @@ public class Vehicle {
         this.vehicleId = vehicleId;
     }
 
-    public LocalDate getYear() {
+    public LocalDateTime getYear() {
         return year;
     }
 
-    public void setYear(LocalDate year) {
+    public void setYear(LocalDateTime year) {
         this.year = year;
     }
 

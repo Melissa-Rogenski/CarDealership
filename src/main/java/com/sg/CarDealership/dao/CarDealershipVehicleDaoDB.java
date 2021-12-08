@@ -26,6 +26,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -62,15 +63,26 @@ public class CarDealershipVehicleDaoDB implements CarDealershipVehicleDao {
     
     @Override
     public List<Vehicle> getAllVehicles(VehicleQueryContext query) {
-        final String SELECT_ALL_VEHICLES_BY_QUERY = "SELECT v.* FROM vehicle v "
-                + "JOIN make m ON (m.make LIKE ? AND m.Id = v.makeId) "
-                + "JOIN model mo ON (mo.model LIKE ? AND mo.Id = v.modelId) "
-                + "WHERE (year BETWEEN ? AND ? ) "
-                + "AND (msrp BETWEEN ? AND ? ) "
-                + "AND (conditionId = ? )";
-        List<Vehicle> vehicles = jdbcTemplate.query(SELECT_ALL_VEHICLES_BY_QUERY, new VehicleMapper(),
-                "%"+query.getSearchBar()+"%", "%"+query.getSearchBar()+"%", query.getMinYear(), query.getMaxYear(), 
-                query.getMinPrice(), query.getMaxPrice(), query.getConditionId());
+        List<Vehicle> vehicles = new ArrayList<>();
+        if(!query.getSearchBar().isEmpty()){
+            final String SELECT_ALL_VEHICLES_BY_QUERY = "SELECT v.* FROM vehicle v "
+                    + "JOIN make m ON (m.make LIKE ? AND m.Id = v.makeId) "
+                    + "JOIN model mo ON (mo.model LIKE ? AND mo.Id = v.modelId) "
+                    + "WHERE (year BETWEEN ? AND ? ) "
+                    + "AND (msrp BETWEEN ? AND ? ) "
+                    + "AND (conditionId = ? )";
+            vehicles = jdbcTemplate.query(SELECT_ALL_VEHICLES_BY_QUERY, new VehicleMapper(),
+                    "%"+query.getSearchBar()+"%", "%"+query.getSearchBar()+"%", query.getMinYear(), query.getMaxYear(), 
+                    query.getMinPrice(), query.getMaxPrice(), query.getConditionId());
+        } else {
+            final String SELECT_ALL_VEHICLES_BY_QUERY = "SELECT v.* FROM vehicle v "
+                    + "WHERE (year BETWEEN ? AND ? ) "
+                    + "AND (msrp BETWEEN ? AND ? ) "
+                    + "AND (conditionId = ? )";
+            vehicles = jdbcTemplate.query(SELECT_ALL_VEHICLES_BY_QUERY, new VehicleMapper(),
+                    query.getMinYear(), query.getMaxYear(), 
+                    query.getMinPrice(), query.getMaxPrice(), query.getConditionId());
+        }
         
         vehicles.stream()
                 .forEach((v) -> addFieldsToVehicle(v));
@@ -161,7 +173,7 @@ public class CarDealershipVehicleDaoDB implements CarDealershipVehicleDao {
         public Vehicle mapRow(ResultSet rs, int index) throws SQLException {
             Vehicle vehicle = new Vehicle();
             vehicle.setVehicleId(rs.getInt("id"));
-            vehicle.setYear(rs.getDate("year").toLocalDate());
+            vehicle.setYear(rs.getTimestamp("year").toLocalDateTime());
             vehicle.setSalePrice(rs.getBigDecimal("salePrice"));
             vehicle.setMSRP(rs.getBigDecimal("msrp"));
             vehicle.setVin(rs.getString("vin"));

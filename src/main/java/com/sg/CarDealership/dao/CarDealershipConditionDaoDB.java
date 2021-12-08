@@ -5,7 +5,6 @@
  */
 package com.sg.CarDealership.dao;
 
-import com.sg.CarDealership.model.Color;
 import com.sg.CarDealership.model.Condition;
 import java.sql.ResultSet;
 import java.sql.SQLException;

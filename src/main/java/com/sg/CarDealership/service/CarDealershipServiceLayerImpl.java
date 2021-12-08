@@ -35,6 +35,7 @@ import com.sg.CarDealership.model.Trans;
 import com.sg.CarDealership.model.User;
 import com.sg.CarDealership.model.Vehicle;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Repository;
 
 
@@ -50,7 +51,7 @@ public class CarDealershipServiceLayerImpl implements CarDealershipServiceLayer 
     private CarDealershipMakeDao makeDao;
     private CarDealershipModelDao modelDao;
     private CarDealershipConditionDao conditionDao;
-    private CarDealershipBodyStyleDao bodyStyledao;
+    private CarDealershipBodyStyleDao bodyStyleDao;
     private CarDealershipInteriorDao interiorDao;
     private CarDealershipColorDao colorDao;
     private CarDealershipTransDao transDao;
@@ -72,7 +73,7 @@ public class CarDealershipServiceLayerImpl implements CarDealershipServiceLayer 
         this.makeDao = makeDao;
         this.modelDao = modelDao;
         this.conditionDao = conditionDao;
-        this.bodyStyledao = bodyStyledao;
+        this.bodyStyleDao = bodyStyledao;
         this.interiorDao = interiorDao;
         this.colorDao = colorDao;
         this.transDao = transDao;
@@ -87,41 +88,94 @@ public class CarDealershipServiceLayerImpl implements CarDealershipServiceLayer 
 
     @Override
     public List<Vehicle> home() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Vehicle> featured = vehicleDao.getAllVehicles().stream()
+                .filter((v) -> v.isFeatured() == true)
+                .collect(Collectors.toList());
+        return featured;
     }
 
     @Override
     public List<Vehicle> getVehicles(VehicleQueryContext query) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        query = validateQuery(query);
+        return vehicleDao.getAllVehicles(query);
     }
 
     @Override
     public Vehicle getVehicleById(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return vehicleDao.getVehicleById(id);
     }
 
     @Override
     public List<Special> getSpecials() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return specialDao.getAllSpecials();
     }
 
     @Override
     public Contact addContact(Contact contact) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return contactDao.addContact(contact);
     }
 
     @Override
-    public Sale addSale(Sale sale, int vehicleId, int userId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Sale addSale(SaleRequestContext request) {
+        Sale sale = new Sale();
+        sale.setBuyerName(request.getBuyerName());
+        sale.setPurchasePrice(request.getPurchasePrice());
+        sale.setPurchaseDate(request.getPurchaseDate());
+        sale.setEmail(request.getEmail());
+        sale.setPhone(request.getPhone());
+        sale.setStreet1(request.getStreet1());
+        sale.setStreet2(request.getStreet2());
+        sale.setCity(request.getCity());
+        sale.setState(getStateFromRequest(request));
+        sale.setPurchaseType(getPurchaseTypeFromRequest(request));
+        sale.setVehicle(getVehicleFromRequest(request));
+        sale.setUser(getUserFromRequest(request));
+        
+        return saleDao.addSale(sale);
     }
 
     @Override
-    public Vehicle addVehicle(VehicleRequestContext vehicleContext) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Vehicle addVehicle(VehicleRequestContext request) {
+        Vehicle vehicle = new Vehicle();
+        vehicle.setYear(request.getYear());
+        vehicle.setSalePrice(request.getSalePrice());
+        vehicle.setMileage(request.getMileage());
+        vehicle.setVin(request.getVin());
+        vehicle.setDescription(request.getDescription());
+        vehicle.setPicturePath(request.getPicturePath());
+        vehicle.setMake(getMakeFromRequest(request));
+        vehicle.setModel(getModelFromRequest(request));
+        vehicle.setCondition(getConditionFromRequest(request));
+        vehicle.setBodyStyle(getBodyStyleFromRequest(request));
+        vehicle.setInterior(getInteriorFromRequest(request));
+        vehicle.setTrans(getTransFromRequest(request));
+        vehicle.setColor(getColorFromRequest(request));
+        
+        return vehicleDao.addVehicle(vehicle);
     }
 
     @Override
-    public boolean editVehicle(VehicleRequestContext vehicleContext) {
+    public boolean editVehicle(VehicleRequestContext request) {
+        Vehicle vehicle = new Vehicle();
+        vehicle.setYear(request.getYear());
+        vehicle.setSalePrice(request.getSalePrice());
+        vehicle.setMileage(request.getMileage());
+        vehicle.setVin(request.getVin());
+        vehicle.setDescription(request.getDescription());
+        vehicle.setPicturePath(request.getPicturePath());
+        vehicle.setMake(getMakeFromRequest(request));
+        vehicle.setModel(getModelFromRequest(request));
+        vehicle.setCondition(getConditionFromRequest(request));
+        vehicle.setBodyStyle(getBodyStyleFromRequest(request));
+        vehicle.setInterior(getInteriorFromRequest(request));
+        vehicle.setTrans(getTransFromRequest(request));
+        vehicle.setColor(getColorFromRequest(request));
+        
+        return true;
+    }
+
+    @Override
+    public boolean deleteVehicleById(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -192,51 +246,51 @@ public class CarDealershipServiceLayerImpl implements CarDealershipServiceLayer 
     }
     
     private Make getMakeFromRequest(VehicleRequestContext request){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return makeDao.getMakeById(request.getMakeId());
     }
     
     private Model getModelFromRequest(VehicleRequestContext request){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return modelDao.getModelById(request.getModelId());
     }
     
     private Condition getConditionFromRequest(VehicleRequestContext request){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return conditionDao.getConditionById(request.getConditionId());
     }
     
     private BodyStyle getBodyStyleFromRequest(VehicleRequestContext request){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return bodyStyleDao.getBodyStyleById(request.getBodyStyleId());
     }
     
     private Interior getInteriorFromRequest(VehicleRequestContext request){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return interiorDao.getInteriorById(request.getInteriorId());
     }
     
     private Trans getTransFromRequest(VehicleRequestContext request){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return transDao.getTransById(request.getTransId());
     }
     
     private Color getColorFromRequest(VehicleRequestContext request){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return colorDao.getColorById(request.getColorId());
     }
     
     private Role getRoleFromRequest(UserRequestContext request){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return roleDao.getRoleById(request.getRoleId());
     }
     
     private State getStateFromRequest(SaleRequestContext request){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return stateDao.getStateById(request.getStateId());
     }
     
     private PurchaseType getPurchaseTypeFromRequest(SaleRequestContext request){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return purchaseDao.getPurchaseTypeById(request.getPurchaseTypeId());
     }
     
     private Vehicle getVehicleFromRequest(SaleRequestContext request){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return vehicleDao.getVehicleById(request.getVehicleId());
     }
     
-    private User getUsersfeFromRequest(SaleRequestContext request){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private User getUserFromRequest(SaleRequestContext request){
+        return userDao.getUserById(request.getUserId());
     }
     
     private VehicleQueryContext validateQuery(VehicleQueryContext query){

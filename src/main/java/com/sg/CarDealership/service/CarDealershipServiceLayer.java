@@ -24,12 +24,12 @@ public interface CarDealershipServiceLayer {
     Vehicle getVehicleById(int id);
     List<Special> getSpecials();
     Contact addContact(Contact contact);
-    Sale addSale(Sale sale, int vehicleId, int userId);
-    Vehicle addVehicle(VehicleRequestContext vehicleContext);
-    boolean editVehicle(VehicleRequestContext vehicleContext);
+    Sale addSale(SaleRequestContext request);
+    Vehicle addVehicle(VehicleRequestContext request);
+    boolean editVehicle(VehicleRequestContext request, boolean toDelete);
     List<User> getUsers();
-    User addUser(UserRequestContext userContext);
-    boolean updateUser(UserRequestContext userContext);
+    User addUser(UserRequestContext requestt);
+    boolean updateUser(UserRequestContext request);
     boolean updatePassword(PasswordChangeContext pass);
     List<Make> getMakes();
     List<Model> getModels();

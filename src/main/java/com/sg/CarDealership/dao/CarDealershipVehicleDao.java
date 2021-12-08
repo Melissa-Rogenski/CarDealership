@@ -17,6 +17,6 @@ public interface CarDealershipVehicleDao {
     List<Vehicle> getAllVehicles(VehicleQueryContext query);
     Vehicle getVehicleById(int id);
     Vehicle addVehicle(Vehicle vehicle);
-    void updateVehicle(Vehicle vehicle);
+    boolean updateVehicle(Vehicle vehicle);
     void deleteVehicleById(int id);
 }

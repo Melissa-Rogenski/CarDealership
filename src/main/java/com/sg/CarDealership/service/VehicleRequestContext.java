@@ -23,8 +23,8 @@ public class VehicleRequestContext {
     private int makeId;
     private int modelId;
     private int conditionId;
-    private int bodyStyleid;
-    private int interiorid;
+    private int bodyStyleId;
+    private int interiorId;
     private int transId;
     private int colorId;
 
@@ -108,20 +108,20 @@ public class VehicleRequestContext {
         this.conditionId = conditionId;
     }
 
-    public int getBodyStyleid() {
-        return bodyStyleid;
+    public int getBodyStyleId() {
+        return bodyStyleId;
     }
 
     public void setBodyStyleid(int bodyStyleid) {
-        this.bodyStyleid = bodyStyleid;
+        this.bodyStyleId = bodyStyleid;
     }
 
-    public int getInteriorid() {
-        return interiorid;
+    public int getInteriorId() {
+        return interiorId;
     }
 
-    public void setInteriorid(int interiorid) {
-        this.interiorid = interiorid;
+    public void setInteriorId(int interiorid) {
+        this.interiorId = interiorid;
     }
 
     public int getTransId() {

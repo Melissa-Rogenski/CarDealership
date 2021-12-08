@@ -24,7 +24,7 @@ public class SaleRequestContext {
     private String street2;
     private String city;
     private String zipcode;
-    private State state;
+    private int stateId;
     private int purchaseTypeId;
     private int vehicleId;
     private int userId;
@@ -109,12 +109,12 @@ public class SaleRequestContext {
         this.zipcode = zipcode;
     }
 
-    public State getState() {
-        return state;
+    public int getStateId() {
+        return stateId;
     }
 
-    public void setState(State state) {
-        this.state = state;
+    public void setStateId(int stateId) {
+        this.stateId = stateId;
     }
 
     public int getPurchaseTypeId() {

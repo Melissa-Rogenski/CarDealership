@@ -114,7 +114,10 @@ public class CarDealershipServiceLayerImpl implements CarDealershipServiceLayer 
     }
 
     @Override
-    public Contact addContact(Contact contact) {
+    public Contact addContact(Contact contact) throws InvalidContactException {
+        if((contact.getEmail() == null) && (contact.getPhone() == null)){
+            throw new InvalidContactException("Invalid contact info. Must provide either phone or email.");
+        }
         return contactDao.addContact(contact);
     }
 
@@ -129,6 +132,7 @@ public class CarDealershipServiceLayerImpl implements CarDealershipServiceLayer 
         sale.setStreet1(request.getStreet1());
         sale.setStreet2(request.getStreet2());
         sale.setCity(request.getCity());
+        sale.setZipcode(request.getZipcode());
         sale.setState(getStateFromRequest(request));
         sale.setPurchaseType(getPurchaseTypeFromRequest(request));
         sale.setVehicle(getVehicleFromRequest(request));

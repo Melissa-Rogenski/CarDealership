@@ -100,6 +100,12 @@ public class CarDealershipSaleDaoDB implements CarDealershipSaleDao {
         }
     }
     
+    private void addStateToSales(List<Sale> sales) {
+        for(Sale sale : sales) {
+            sale.setState(getStateForSale(sale));
+        }
+    }
+    
     @Override
     public List<Sale> getAllSales() {
         final String SELECT_ALL_SALES = "SELECT * FROM sale";
@@ -108,6 +114,7 @@ public class CarDealershipSaleDaoDB implements CarDealershipSaleDao {
         addPurchaseTypeToSales(sales);
         addVehicleToSales(sales);
         addUserToSales(sales);
+        addStateToSales(sales);
         
         return sales;
     }
@@ -130,7 +137,7 @@ public class CarDealershipSaleDaoDB implements CarDealershipSaleDao {
     @Override
     @Transactional
     public Sale addSale(Sale sale) {
-        final String INSERT_SALE = "INSERT INTO sale(buyerName, purchasePrice, purchaseDate, email, phone, street1, street2, city, zipcode, state, purchaseTypeId, vehicleId, userId) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        final String INSERT_SALE = "INSERT INTO sale(buyerName, purchasePrice, purchaseDate, email, phone, street1, street2, city, zipcode, stateId, purchaseTypeId, vehicleId, userId) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
         jdbc.update(INSERT_SALE,
                 sale.getBuyerName(),
                 sale.getPurchasePrice(),
@@ -141,6 +148,7 @@ public class CarDealershipSaleDaoDB implements CarDealershipSaleDao {
                 sale.getStreet2(),
                 sale.getCity(),
                 sale.getZipcode(),
+                sale.getState().getStateId(),
                 sale.getPurchaseType().getPurchaseTypeId(),
                 sale.getVehicle().getVehicleId(),
                 sale.getUser().getUserId());

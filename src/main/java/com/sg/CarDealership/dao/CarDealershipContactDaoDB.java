@@ -60,8 +60,8 @@ public class CarDealershipContactDaoDB implements CarDealershipContactDao {
     @Override
     @Transactional
     public Contact addContact(Contact contact) {
-        final String INSERT_CONTACT = "INSERT INTO contact(name,message,phone,email) "
-                + "VALUES(?)";
+        final String INSERT_CONTACT = "INSERT INTO contact(`name`,message,phone,email) "
+                + "VALUES(?,?,?,?)";
         jdbc.update(INSERT_CONTACT, 
                 contact.getName(),
                 contact.getMessage(),

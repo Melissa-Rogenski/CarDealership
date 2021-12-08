@@ -48,7 +48,7 @@ public class CarDealershipStateDaoDB implements CarDealershipStateDao {
     public State getStateById(int id) {
         try {
             final String SELECT_STATE_BY_ID = "SELECT * FROM state WHERE id = ?";
-            return jdbc.queryForObject(SELECT_STATE_BY_ID, new CarDealershipStateDaoDB.StateMapper(), id);
+            return jdbc.queryForObject(SELECT_STATE_BY_ID, new StateMapper(), id);
         } catch(DataAccessException ex) {
             return null;
         }

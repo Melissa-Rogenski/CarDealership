@@ -23,7 +23,7 @@ public interface CarDealershipServiceLayer {
     List<Vehicle> getVehicles(VehicleQueryContext query);
     Vehicle getVehicleById(int id);
     List<Special> getSpecials();
-    Contact addContact(Contact contact);
+    Contact addContact(Contact contact) throws InvalidContactException;
     Sale addSale(SaleRequestContext request);
     Vehicle addVehicle(VehicleRequestContext request) throws InvalidVehicleException;
     boolean editVehicle(VehicleRequestContext request) throws InvalidVehicleException;

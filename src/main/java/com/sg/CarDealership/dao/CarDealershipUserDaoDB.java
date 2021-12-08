@@ -45,7 +45,7 @@ public class CarDealershipUserDaoDB implements CarDealershipUserDao {
     
     private Role getRoleForUser(User user) {
         final String SELECT_ROLE_FOR_USER = "SELECT r.* FROM role r "
-                + "JOIN make u ON r.id = u.roleId WHERE u.id = ?";
+                + "JOIN user u ON r.id = u.roleId WHERE u.id = ?";
         return jdbc.queryForObject(SELECT_ROLE_FOR_USER, new RoleMapper(), 
                 user.getUserId());
     }

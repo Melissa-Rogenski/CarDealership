@@ -74,6 +74,14 @@ public class CarDealershipVehicleDaoDB implements CarDealershipVehicleDao {
             vehicles = jdbcTemplate.query(SELECT_ALL_VEHICLES_BY_QUERY, new VehicleMapper(),
                     "%"+query.getSearchBar()+"%", "%"+query.getSearchBar()+"%", query.getMinYear(), query.getMaxYear(), 
                     query.getMinPrice(), query.getMaxPrice(), query.getConditionId());
+        } else if(query.getConditionId()==0){
+            final String SELECT_ALL_VEHICLES_BY_QUERY = "SELECT v.* FROM vehicle v "
+                    + "WHERE (year BETWEEN ? AND ? ) "
+                    + "AND (msrp BETWEEN ? AND ? ) ";
+            vehicles = jdbcTemplate.query(SELECT_ALL_VEHICLES_BY_QUERY, new VehicleMapper(),
+                    query.getMinYear(), query.getMaxYear(), 
+                    query.getMinPrice(), query.getMaxPrice());
+
         } else {
             final String SELECT_ALL_VEHICLES_BY_QUERY = "SELECT v.* FROM vehicle v "
                     + "WHERE (year BETWEEN ? AND ? ) "

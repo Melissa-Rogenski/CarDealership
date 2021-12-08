@@ -12,6 +12,7 @@ public class PasswordChangeContext {
     
     private String password;
     private String confirmation;
+    private int userId;
 
     public String getPassword() {
         return password;
@@ -29,6 +30,13 @@ public class PasswordChangeContext {
         this.confirmation = confirmation;
     }
 
-    
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
 }
 

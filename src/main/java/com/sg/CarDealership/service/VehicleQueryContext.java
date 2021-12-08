@@ -13,12 +13,14 @@ import java.time.LocalDate;
  */
 public class VehicleQueryContext {
     
-    private String searchBar;
-    private LocalDate maxYear;
-    private BigDecimal minPrice;
-    private BigDecimal maxPrice;
+    private String searchBar = "";
+    private LocalDate maxYear = LocalDate.MAX;
+    private LocalDate minYear = LocalDate.MIN;
+    private BigDecimal minPrice = BigDecimal.ZERO;
+    private BigDecimal maxPrice = new BigDecimal("1000000000");
     private int conditionId;
     private boolean featured;
+    private boolean purchased;
 
     public String getSearchBar() {
         return searchBar;
@@ -34,6 +36,14 @@ public class VehicleQueryContext {
 
     public void setMaxYear(LocalDate maxYear) {
         this.maxYear = maxYear;
+    }
+
+    public LocalDate getMinYear() {
+        return minYear;
+    }
+
+    public void setMinYear(LocalDate minYear) {
+        this.minYear = minYear;
     }
 
     public BigDecimal getMinPrice() {
@@ -58,6 +68,14 @@ public class VehicleQueryContext {
 
     public void setConditionId(int conditionId) {
         this.conditionId = conditionId;
+    }
+
+    public boolean isPurchased() {
+        return purchased;
+    }
+
+    public void setPurchased(boolean purchased) {
+        this.purchased = purchased;
     }
 
     public boolean isFeatured() {

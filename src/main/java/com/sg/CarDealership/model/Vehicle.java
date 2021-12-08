@@ -8,6 +8,7 @@ public class Vehicle {
     private int vehicleId;
     private LocalDateTime year;
     private BigDecimal salePrice;
+    private BigDecimal MSRP;
     private int mileage;
     private String vin;
     private String description;
@@ -44,6 +45,14 @@ public class Vehicle {
 
     public void setSalePrice(BigDecimal salePrice) {
         this.salePrice = salePrice;
+    }
+
+    public BigDecimal getMSRP() {
+        return MSRP;
+    }
+
+    public void setMSRP(BigDecimal MSRP) {
+        this.MSRP = MSRP;
     }
 
     public int getMileage() {

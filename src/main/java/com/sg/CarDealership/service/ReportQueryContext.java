@@ -12,9 +12,9 @@ import java.time.LocalDate;
  */
 public class ReportQueryContext {
     
-    private int userId;
-    private LocalDate minDate;
-    private LocalDate maxDate;
+    private int userId = 0;
+    private LocalDate minDate = LocalDate.MIN;
+    private LocalDate maxDate = LocalDate.MAX;
 
     public int getUserId() {
         return userId;

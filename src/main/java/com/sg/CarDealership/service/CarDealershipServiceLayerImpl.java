@@ -34,6 +34,9 @@ import com.sg.CarDealership.model.State;
 import com.sg.CarDealership.model.Trans;
 import com.sg.CarDealership.model.User;
 import com.sg.CarDealership.model.Vehicle;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Repository;
@@ -85,7 +88,7 @@ public class CarDealershipServiceLayerImpl implements CarDealershipServiceLayer 
         this.specialDao = specialDao;
         this.saleDao = saleDao;
     }
-
+    
     @Override
     public List<Vehicle> home() {
         List<Vehicle> featured = vehicleDao.getAllVehicles().stream()
@@ -96,7 +99,6 @@ public class CarDealershipServiceLayerImpl implements CarDealershipServiceLayer 
 
     @Override
     public List<Vehicle> getVehicles(VehicleQueryContext query) {
-        query = validateQuery(query);
         return vehicleDao.getAllVehicles(query);
     }
 
@@ -135,7 +137,9 @@ public class CarDealershipServiceLayerImpl implements CarDealershipServiceLayer 
     }
 
     @Override
-    public Vehicle addVehicle(VehicleRequestContext request) {
+    public Vehicle addVehicle(VehicleRequestContext request) throws InvalidVehicleException{
+        validateVehicleRequest(request);
+        
         Vehicle vehicle = new Vehicle();
         vehicle.setYear(request.getYear());
         vehicle.setSalePrice(request.getSalePrice());
@@ -155,7 +159,9 @@ public class CarDealershipServiceLayerImpl implements CarDealershipServiceLayer 
     }
 
     @Override
-    public boolean editVehicle(VehicleRequestContext request) {
+    public boolean editVehicle(VehicleRequestContext request) throws InvalidVehicleException{
+        validateVehicleRequest(request);
+        
         Vehicle vehicle = new Vehicle();
         vehicle.setYear(request.getYear());
         vehicle.setSalePrice(request.getSalePrice());
@@ -171,77 +177,198 @@ public class CarDealershipServiceLayerImpl implements CarDealershipServiceLayer 
         vehicle.setTrans(getTransFromRequest(request));
         vehicle.setColor(getColorFromRequest(request));
         
-        return true;
+        return vehicleDao.updateVehicle(vehicle);
     }
 
     @Override
     public boolean deleteVehicleById(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(vehicleDao.getVehicleById(id) != null){
+            vehicleDao.deleteVehicleById(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public List<User> getUsers() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return userDao.getAllUsers();
     }
 
     @Override
-    public User addUser(UserRequestContext userContext) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public User addUser(UserRequestContext request) {
+        User user = new User();
+        user.setUserId(0);
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setEmail(request.getEmail());
+        user.setPassword(request.getPassword());
+        user.setRole(getRoleFromRequest(request));
+        
+        return userDao.addUser(user);
     }
 
     @Override
-    public boolean updateUser(UserRequestContext userContext) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean updateUser(UserRequestContext request) {
+        User user = new User();
+        user.setUserId(request.getUserId());
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setEmail(request.getEmail());
+        user.setPassword(request.getPassword());
+        user.setRole(getRoleFromRequest(request));
+        
+        return true;
     }
 
     @Override
-    public boolean updatePassword(PasswordChangeContext pass) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean updatePassword(PasswordChangeContext pass) throws PasswordsDoNotMatchException {
+        validatePassword(pass);
+        User user = userDao.getUserById(pass.getUserId());
+        user.setPassword(pass.getPassword());
+        return userDao.updateUser(user);
     }
 
     @Override
     public List<Make> getMakes() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return makeDao.getAllMakes();
     }
 
     @Override
     public List<Model> getModels() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return modelDao.getAllModels();
     }
 
     @Override
-    public Make addMake(Make make) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Make addMake(Make make, int userId) {
+        make.setMakeId(0);
+        make.setUser(userDao.getUserById(userId));
+        return makeDao.addMake(make);
     }
 
     @Override
-    public Model addModel(Model model) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Model addModel(Model model, int userId, int makeId) {
+        model.setModelId(0);
+        model.setUser(userDao.getUserById(userId));
+        model.setMake(makeDao.getMakeById(makeId));
+        
+        return modelDao.addModel(model);
     }
 
     @Override
     public Special addSpecial(Special special) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        special.setSpecialId(0);
+        return specialDao.addSpecial(special);
     }
 
     @Override
     public boolean deleteSpecialById(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(specialDao.getSpecialById(id) != null){
+            specialDao.deleteSpecialById(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public List<SalesReport> getSalesReport(ReportQueryContext query) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<SalesReport> reports = new ArrayList<>(); // List of sales reports
+        
+        List<Sale> filtered = saleDao.getAllSales().stream() // filter down to sales that match date query
+                .filter((s) -> (s.getPurchaseDate().compareTo(query.getMinDate()) >= 0))
+                .filter((s) -> (s.getPurchaseDate().compareTo(query.getMaxDate()) <= 1))
+                .collect(Collectors.toList());
+        
+        List<User> users = filtered.stream() // get list of users with sales
+                .map((s) -> s.getUser())
+                .collect(Collectors.toList());
+        
+        User user = userDao.getUserById(query.getUserId()); // get user IDed by query, if any
+        
+        if(query.getUserId() == 0) {
+            users.stream()
+                .forEach((u) -> {
+                    reports.add(generateSalesReportForUser(filtered, u));
+                });
+        } else if(users.contains(user)){
+            reports.add(generateSalesReportForUser(filtered, user));
+        }
+        
+        return reports;
     }
 
     @Override
     public List<InventoryReport> getInventoryReport() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<InventoryReport> reports = new ArrayList<>(); // List of inventory reports
+        
+        vehicleDao.getAllVehicles().stream() // List of all models of vehicles in inventory
+                .map((v) -> v.getModel())
+                .forEach((m) -> {
+                    reports.add(generateInventoryReportForModel(m));
+                });
+        
+        return reports;
     }
     
     // Business logic and helper methods
-    private VehicleRequestContext validateVehicleRequest(VehicleRequestContext request){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private SalesReport generateSalesReportForUser(List<Sale> filtered, User user){
+        SalesReport report = new SalesReport();
+        
+        report.setTotalSales(filtered.stream()
+                .filter((s) -> s.getUser().getUserId() == user.getUserId())
+                .map((s) -> s.getPurchasePrice())
+                .reduce(BigDecimal.ZERO, BigDecimal::add));
+        report.setTotalVehicles(filtered.stream()
+                .filter((s) -> s.getUser().getUserId() == user.getUserId())
+                .collect(Collectors.toList()).size());
+        
+        return report;
+    }
+    
+    private InventoryReport generateInventoryReportForModel(Model model){
+        InventoryReport report = new InventoryReport();
+        
+        List<Vehicle> modelStock = vehicleDao.getAllVehicles().stream()
+                .filter((v) -> v.getModel().equals(model))
+                .collect(Collectors.toList());
+        
+        report.setCount(modelStock.size());
+        report.setStockValue(modelStock.stream()
+            .map((v) -> v.getMSRP())
+            .reduce(BigDecimal.ZERO, BigDecimal::add));
+        
+        return report;
+    }
+    
+    private void validatePassword(PasswordChangeContext pass) throws PasswordsDoNotMatchException {
+        if(!pass.getPassword().equals(pass.getConfirmation())){
+            throw new PasswordsDoNotMatchException("Passwords do not much. Cannot save new password.");
+        }
+    }
+    
+    private void validateVehicleRequest(VehicleRequestContext request) throws InvalidVehicleException {
+        // Validate Date
+        LocalDateTime date = request.getYear();
+        LocalDateTime minDate = LocalDateTime.parse("2000-01-01T00:00:00");
+        LocalDateTime maxDate = LocalDateTime.now().plusYears(1);
+        
+        if(date.compareTo(minDate) < 0 || date.compareTo(maxDate) > 0){
+            throw new InvalidVehicleException("Vehicle is not in valid date range. Cannot add or edit vehicle.");
+        }
+        
+        // Validate Condition
+        if(((request.getConditionId() == 1) && (request.getMileage() >= 1000)) 
+                || ((request.getConditionId() == 2) && (request.getMileage() < 1000))){
+            throw new InvalidVehicleException("Invalid condition for mileage. Cannot add or edit vehicle.");
+        }
+        
+        // Validate Sale Price and MSRP
+        if((request.getSalePrice().signum() == -1) 
+                || (request.getMSRP().signum() == -1)
+                || (request.getSalePrice().compareTo(request.getMSRP()) >= 0)){
+            throw new InvalidVehicleException("Sale price must be less than MSRP. Cannot add or edit vehicle.");
+        }
 
     }
     
@@ -250,7 +377,12 @@ public class CarDealershipServiceLayerImpl implements CarDealershipServiceLayer 
     }
     
     private Model getModelFromRequest(VehicleRequestContext request){
-        return modelDao.getModelById(request.getModelId());
+        Model model = modelDao.getModelById(request.getModelId());
+        if(model.getMake().getMakeId() == request.getMakeId()){
+            return model;
+        } else {
+            return null;
+        }
     }
     
     private Condition getConditionFromRequest(VehicleRequestContext request){
@@ -291,14 +423,6 @@ public class CarDealershipServiceLayerImpl implements CarDealershipServiceLayer 
     
     private User getUserFromRequest(SaleRequestContext request){
         return userDao.getUserById(request.getUserId());
-    }
-    
-    private VehicleQueryContext validateQuery(VehicleQueryContext query){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    private VehicleQueryContext validateQueryForSalesAdmin(VehicleQueryContext query){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

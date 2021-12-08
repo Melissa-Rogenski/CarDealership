@@ -9,7 +9,6 @@ import com.sg.CarDealership.dao.CarDealershipPurchaseTypeDaoDB.PurchaseTypeMappe
 import com.sg.CarDealership.dao.CarDealershipStateDaoDB.StateMapper;
 import com.sg.CarDealership.dao.CarDealershipUserDaoDB.UserMapper;
 import com.sg.CarDealership.dao.CarDealershipVehicleDaoDB.VehicleMapper;
-import com.sg.CarDealership.model.Model;
 import com.sg.CarDealership.model.PurchaseType;
 import com.sg.CarDealership.model.Sale;
 import com.sg.CarDealership.model.State;
@@ -17,7 +16,6 @@ import com.sg.CarDealership.model.User;
 import com.sg.CarDealership.model.Vehicle;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;

@@ -15,6 +15,6 @@ public interface CarDealershipSaleDao {
     List<Sale> getAllSales();
     Sale getSaleById(int id);
     Sale addSale(Sale sale);
-    void updateSale(Sale sale);
+    boolean updateSale(Sale sale);
     void deleteSaleById(int id);
 }

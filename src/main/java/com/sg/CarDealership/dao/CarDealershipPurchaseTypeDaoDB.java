@@ -30,7 +30,7 @@ public class CarDealershipPurchaseTypeDaoDB implements CarDealershipPurchaseType
     }
 
     @Override
-    public void updatePurchaseType(PurchaseType purchaseType) {
+    public boolean updatePurchaseType(PurchaseType purchaseType) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -15,6 +15,6 @@ public interface CarDealershipContactDao {
     List<Contact> getAllContacts();
     Contact getContactById(int id);
     Contact addContact(Contact contact);
-    void updateContact(Contact contact);
+    boolean updateContact(Contact contact);
     void deleteContactById(int id);
 }

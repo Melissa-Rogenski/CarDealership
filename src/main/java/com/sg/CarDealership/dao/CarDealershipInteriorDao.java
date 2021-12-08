@@ -15,6 +15,6 @@ public interface CarDealershipInteriorDao {
     List<Interior> getAllInteriors();
     Interior getInteriorById(int id);
     Interior addInterior(Interior interior);
-    void updateInterior(Interior interior);
+    boolean updateInterior(Interior interior);
     void deleteInteriorById(int id);
 }

@@ -15,6 +15,6 @@ public interface CarDealershipRoleDao {
     List<Role> getAllRoles();
     Role getRoleById(int id);
     Role addRole(Role role);
-    void updateRole(Role role);
+    boolean updateRole(Role role);
     void deleteRoleById(int id);
 }

@@ -15,6 +15,6 @@ public interface CarDealershipModelDao {
     List<Model> getAllModels();
     Model getModelById(int id);
     Model addModel(Model model);
-    void updateModel(Model model);
+    boolean updateModel(Model model);
     void deleteModelById(int id);
 }

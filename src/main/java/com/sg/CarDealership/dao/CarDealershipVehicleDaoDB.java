@@ -6,6 +6,7 @@
 package com.sg.CarDealership.dao;
 
 import com.sg.CarDealership.model.Vehicle;
+import com.sg.CarDealership.service.VehicleQueryContext;
 import java.util.List;
 
 /**
@@ -30,12 +31,17 @@ public class CarDealershipVehicleDaoDB implements CarDealershipVehicleDao {
     }
 
     @Override
-    public void updateVehicle(Vehicle vehicle) {
+    public void deleteVehicleById(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void deleteVehicleById(int id) {
+    public List<Vehicle> getAllVehicles(VehicleQueryContext query) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean updateVehicle(Vehicle vehicle) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

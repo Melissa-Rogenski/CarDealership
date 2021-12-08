@@ -30,7 +30,7 @@ public class CarDealershipSpecialDaoDB implements CarDealershipSpecialDao {
     }
 
     @Override
-    public void updateSpecial(Special special) {
+    public boolean updateSpecial(Special special) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -15,6 +15,6 @@ public interface CarDealershipMakeDao {
     List<Make> getAllMakes();
     Make getMakeById(int id);
     Make addMake(Make make);
-    void updateMake(Make make);
+    boolean updateMake(Make make);
     void deleteMakeById(int id);
 }

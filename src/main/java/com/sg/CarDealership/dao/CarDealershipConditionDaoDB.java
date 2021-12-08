@@ -30,7 +30,7 @@ public class CarDealershipConditionDaoDB implements CarDealershipConditionDao {
     }
 
     @Override
-    public void updateCondition(Condition condition) {
+    public boolean updateCondition(Condition condition) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

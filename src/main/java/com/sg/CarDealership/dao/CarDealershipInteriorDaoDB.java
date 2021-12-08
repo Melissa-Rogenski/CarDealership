@@ -30,7 +30,7 @@ public class CarDealershipInteriorDaoDB implements CarDealershipInteriorDao {
     }
 
     @Override
-    public void updateInterior(Interior interior) {
+    public boolean updateInterior(Interior interior) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

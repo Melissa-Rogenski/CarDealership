@@ -15,6 +15,6 @@ public interface CarDealershipBodyStyleDao {
     List<BodyStyle> getAllBodyStyles();
     BodyStyle getBodyStyleById(int id);
     BodyStyle addBodyStyle(BodyStyle bodyStyle);
-    void updateBodyStyle(BodyStyle bodyStyle);
+    boolean updateBodyStyle(BodyStyle bodyStyle);
     void deleteBodyStyleById(int id);
 }

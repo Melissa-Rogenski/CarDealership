@@ -30,7 +30,7 @@ public class CarDealershipRoleDaoDB implements CarDealershipRoleDao {
     }
 
     @Override
-    public void updateRole(Role role) {
+    public boolean updateRole(Role role) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

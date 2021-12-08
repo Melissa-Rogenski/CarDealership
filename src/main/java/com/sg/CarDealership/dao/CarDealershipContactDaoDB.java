@@ -30,7 +30,7 @@ public class CarDealershipContactDaoDB implements CarDealershipContactDao {
     }
 
     @Override
-    public void updateContact(Contact contact) {
+    public boolean updateContact(Contact contact) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

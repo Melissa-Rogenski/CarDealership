@@ -30,7 +30,7 @@ public class CarDealershipModelDaoDB implements CarDealershipModelDao {
     }
 
     @Override
-    public void updateModel(Model model) {
+    public boolean updateModel(Model model) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

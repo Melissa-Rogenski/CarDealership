@@ -15,6 +15,6 @@ public interface CarDealershipSpecialDao {
     List<Special> getAllSpecials();
     Special getSpecialById(int id);
     Special addSpecial(Special special);
-    void updateSpecial(Special special);
+    boolean updateSpecial(Special special);
     void deleteSpecialById(int id);
 }

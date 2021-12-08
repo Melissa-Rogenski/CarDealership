@@ -30,7 +30,7 @@ public class CarDealershipTransDaoDB implements CarDealershipTransDao {
     }
 
     @Override
-    public void updateTrans(Trans trans) {
+    public boolean updateTrans(Trans trans) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -15,6 +15,6 @@ public interface CarDealershipColorDao {
     List<Color> getAllColors();
     Color getColorById(int id);
     Color addColor(Color color);
-    void updateColor(Color color);
+    boolean updateColor(Color color);
     void deleteColorById(int id);
 }

@@ -15,6 +15,6 @@ public interface CarDealershipUserDao {
     List<User> getAllUsers();
     User getUserById(int id);
     User addUser(User user);
-    void updateUser(User user);
+    boolean updateUser(User user);
     void deleteUserById(int id);
 }

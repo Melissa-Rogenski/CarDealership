@@ -30,7 +30,7 @@ public class CarDealershipMakeDaoDB implements CarDealershipMakeDao {
     }
 
     @Override
-    public void updateMake(Make make) {
+    public boolean updateMake(Make make) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

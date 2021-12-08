@@ -30,7 +30,7 @@ public class CarDealershipSaleDaoDB implements CarDealershipSaleDao {
     }
 
     @Override
-    public void updateSale(Sale sale) {
+    public boolean updateSale(Sale sale) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

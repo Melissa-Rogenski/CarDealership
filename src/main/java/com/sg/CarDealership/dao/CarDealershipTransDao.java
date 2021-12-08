@@ -15,6 +15,6 @@ public interface CarDealershipTransDao {
     List<Trans> getAllTrans();
     Trans getTransById(int id);
     Trans addTrans(Trans trans);
-    void updateTrans(Trans trans);
+    boolean updateTrans(Trans trans);
     void deleteTransById(int id);
 }

@@ -15,6 +15,6 @@ public interface CarDealershipPurchaseTypeDao {
     List<PurchaseType> getAllPurchaseTypes();
     PurchaseType getPurchaseTypeById(int id);
     PurchaseType addPurchaseType(PurchaseType purchaseType);
-    void updatePurchaseType(PurchaseType purchaseType);
+    boolean updatePurchaseType(PurchaseType purchaseType);
     void deletePurchaseTypeById(int id);
 }

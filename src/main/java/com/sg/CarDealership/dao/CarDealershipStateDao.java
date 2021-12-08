@@ -15,6 +15,6 @@ public interface CarDealershipStateDao {
     List<State> getAllStates();
     State getStateById(int id);
     State addState(State state);
-    void updateState(State state);
+    boolean updateState(State state);
     void deleteStateById(int id);
 }

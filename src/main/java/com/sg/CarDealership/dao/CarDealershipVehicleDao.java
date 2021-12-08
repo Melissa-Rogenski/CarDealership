@@ -5,6 +5,7 @@
 package com.sg.CarDealership.dao;
 
 import com.sg.CarDealership.model.Vehicle;
+import com.sg.CarDealership.service.VehicleQueryContext;
 import java.util.List;
 
 /**
@@ -13,6 +14,7 @@ import java.util.List;
  */
 public interface CarDealershipVehicleDao {
     List<Vehicle> getAllVehicles();
+    List<Vehicle> getAllVehicles(VehicleQueryContext query);
     Vehicle getVehicleById(int id);
     Vehicle addVehicle(Vehicle vehicle);
     void updateVehicle(Vehicle vehicle);

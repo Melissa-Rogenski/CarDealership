@@ -192,7 +192,7 @@ public class CarDealershipVehicleDaoDB implements CarDealershipVehicleDao {
     }
     
     private Condition getConditionForVehicle(Vehicle vehicle){
-        final String SELECT_CONDITION_FOR_VEHICLE = "SELECT c.* FROM condition c "
+        final String SELECT_CONDITION_FOR_VEHICLE = "SELECT c.* FROM `condition` c "
                 + "JOIN vehicle v ON c.id = v.conditionId WHERE v.id = ?";
         return jdbcTemplate.queryForObject(SELECT_CONDITION_FOR_VEHICLE, new ConditionMapper(), 
                 vehicle.getVehicleId());
@@ -214,14 +214,14 @@ public class CarDealershipVehicleDaoDB implements CarDealershipVehicleDao {
     
     private Trans getTransForVehicle(Vehicle vehicle){
         final String SELECT_TRANS_FOR_VEHICLE = "SELECT t.* FROM trans t "
-                + "JOIN vehicle v ON m.id = v.transId WHERE v.id = ?";
+                + "JOIN vehicle v ON t.id = v.transId WHERE v.id = ?";
         return jdbcTemplate.queryForObject(SELECT_TRANS_FOR_VEHICLE, new TransMapper(), 
                 vehicle.getVehicleId());
     }
     
     private Color getColorForVehicle(Vehicle vehicle){
         final String SELECT_COLOR_FOR_VEHICLE = "SELECT c.* FROM color c "
-                + "JOIN vehicle v ON m.id = v.colorId WHERE v.id = ?";
+                + "JOIN vehicle v ON c.id = v.colorId WHERE v.id = ?";
         return jdbcTemplate.queryForObject(SELECT_COLOR_FOR_VEHICLE, new ColorMapper(), 
                 vehicle.getVehicleId());
     }

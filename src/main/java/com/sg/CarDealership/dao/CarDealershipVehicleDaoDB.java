@@ -58,9 +58,9 @@ public class CarDealershipVehicleDaoDB implements CarDealershipVehicleDao {
     
     @Override
     public List<Vehicle> getAllVehicles(VehicleQueryContext query) {
-        final String SELECT_ALL_VEHICLES_BY_QUERY = "SELECT * FROM vehicle "
-                + "JOIN make m ON (m.make LIKE ? AND m.Id = vehicle.makeId) "
-                + "JOIN model mo ON (mo.model LIKE ? AND mo.Id = vehicle.modelId) "
+        final String SELECT_ALL_VEHICLES_BY_QUERY = "SELECT v.* FROM vehicle v"
+                + "JOIN make m ON (m.make LIKE ? AND m.Id = v.makeId) "
+                + "JOIN model mo ON (mo.model LIKE ? AND mo.Id = v.modelId) "
                 + "WHERE (year BETWEEN ? AND ? )"
                 + "AND (msrp BETWEEN ? AND ? )"
                 + "AND (conditionId = ? )";

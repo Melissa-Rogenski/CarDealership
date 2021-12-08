@@ -6,6 +6,7 @@ package com.sg.CarDealership.controller;
  */
 
 
+import com.sg.CarDealership.model.Condition;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,6 +35,7 @@ import com.sg.CarDealership.service.SalesReport;
 import com.sg.CarDealership.service.UserRequestContext;
 import com.sg.CarDealership.service.VehicleQueryContext;
 import com.sg.CarDealership.service.VehicleRequestContext;
+import org.springframework.http.HttpStatus;
 /**
  *
  * @author calebdiaz
@@ -55,7 +57,12 @@ public class CarDealershipController {
     
     @GetMapping("/inventory/new")
     public ResponseEntity<List<Vehicle>> getNewVehicles(@RequestBody VehicleQueryContext query){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        query.setConditionId(Condition.NEW);
+        List<Vehicle> results = service.getVehicles(query);
+        if (results == null) {
+            return new ResponseEntity("There was an error processing your request.", HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+        return ResponseEntity.ok(results);
     }
     
     @GetMapping("/inventory/used")

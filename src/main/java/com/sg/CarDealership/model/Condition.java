@@ -4,6 +4,9 @@ import java.util.Objects;
 
 public class Condition {
 
+    public static int NEW = 1;
+    public static int USED = 2;
+    
     private int conditionId;
     private String condition;
 

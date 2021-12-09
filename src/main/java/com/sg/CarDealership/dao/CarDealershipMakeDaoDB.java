@@ -78,7 +78,7 @@ public class CarDealershipMakeDaoDB implements CarDealershipMakeDao {
     @Override
     public Make getMakeById(int id) {
         try {
-            final String SELECT_MAKE_BY_ID = "SELECT * FROM make WHERE id = ? ";
+            final String SELECT_MAKE_BY_ID = "SELECT * FROM `make` WHERE id = ? ";
             Make make = jdbc.queryForObject(SELECT_MAKE_BY_ID, 
                     new MakeMapper(), id);
             make.setUser(getUserForMake(make));
@@ -93,7 +93,7 @@ public class CarDealershipMakeDaoDB implements CarDealershipMakeDao {
     @Override
     @Transactional
     public Make addMake(Make make) {
-        final String INSERT_MAKE = "INSERT INTO make(make, dateAdded, userId) VALUES(?,?,?)";
+        final String INSERT_MAKE = "INSERT INTO `make`(make, dateAdded, userId) VALUES(?,?,?)";
         jdbc.update(INSERT_MAKE,
                 make.getMake(),
                 Timestamp.valueOf(make.getDateAdded()),
@@ -106,7 +106,7 @@ public class CarDealershipMakeDaoDB implements CarDealershipMakeDao {
 
     @Override
     public boolean updateMake(Make make) {
-        final String UPDATE_MAKE = "UPDATE make "
+        final String UPDATE_MAKE = "UPDATE `make` "
                 + "SET make = ?, dateAdded = ?, userId = ? WHERE id = ?";
         jdbc.update(UPDATE_MAKE,
                 make.getMake(),
@@ -119,15 +119,15 @@ public class CarDealershipMakeDaoDB implements CarDealershipMakeDao {
     @Override
     @Transactional
     public void deleteMakeById(int id) {
-        final String DELETE_VEHICLE_MAKE = "DELETE FROM vehicle "
+        final String DELETE_VEHICLE_MAKE = "DELETE FROM `vehicle` "
                 + "WHERE makeId = ?";
         jdbc.update(DELETE_VEHICLE_MAKE, id);
         
-        final String DELETE_MODEL_MAKE = "DELETE FROM model "
+        final String DELETE_MODEL_MAKE = "DELETE FROM `model` "
                 + "WHERE makeId = ?";
         jdbc.update(DELETE_MODEL_MAKE, id);
 
-        final String DELETE_MAKE = "DELETE FROM make WHERE id = ?";
+        final String DELETE_MAKE = "DELETE FROM `make` WHERE id = ?";
         jdbc.update(DELETE_MAKE, id);
     }
     

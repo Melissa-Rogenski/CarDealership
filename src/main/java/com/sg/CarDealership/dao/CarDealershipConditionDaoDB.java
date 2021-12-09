@@ -40,7 +40,7 @@ public class CarDealershipConditionDaoDB implements CarDealershipConditionDao {
     
     @Override
     public List<Condition> getAllConditions() {
-        final String SELECT_ALL_CONDITIONS = "SELECT * FROM condition";
+        final String SELECT_ALL_CONDITIONS = "SELECT * FROM `condition`";
         return jdbc.query(SELECT_ALL_CONDITIONS, new ConditionMapper());
     }
 
@@ -59,7 +59,7 @@ public class CarDealershipConditionDaoDB implements CarDealershipConditionDao {
     @Override
     @Transactional
     public Condition addCondition(Condition condition) {
-        final String INSERT_CONDITION = "INSERT INTO condition(condition) "
+        final String INSERT_CONDITION = "INSERT INTO `condition`(`condition`) "
                 + "VALUES(?)";
         jdbc.update(INSERT_CONDITION, 
                 condition.getCondition());
@@ -70,7 +70,7 @@ public class CarDealershipConditionDaoDB implements CarDealershipConditionDao {
 
     @Override
     public boolean updateCondition(Condition condition) {
-        final String UPDATE_CONDITION = "UPDATE condition SET condition = ?"
+        final String UPDATE_CONDITION = "UPDATE `condition` SET `condition` = ?"
                 + "WHERE id = ?";
         jdbc.update(UPDATE_CONDITION,
                 condition.getCondition(),
@@ -81,11 +81,11 @@ public class CarDealershipConditionDaoDB implements CarDealershipConditionDao {
     @Override
     @Transactional
     public void deleteConditionById(int id) {
-        final String DELETE_VEHICLE_CONDITION = "DELETE FROM vehicle "
+        final String DELETE_VEHICLE_CONDITION = "DELETE FROM `vehicle` "
                 + "WHERE conditionId = ?";
         jdbc.update(DELETE_VEHICLE_CONDITION, id);
         
-        final String DELETE_CONDITION = "DELETE FROM condition WHERE id = ?";
+        final String DELETE_CONDITION = "DELETE FROM `condition` WHERE id = ?";
         jdbc.update(DELETE_CONDITION, id);
     }
     

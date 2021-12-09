@@ -42,7 +42,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = TestApplicationConfiguration.class)
-class BodyStyleDaoTest {
+public class BodyStyleDaoTest {
     @Autowired
     CarDealershipBodyStyleDao bodyStyleDao;
     @Autowired
@@ -171,10 +171,12 @@ class BodyStyleDaoTest {
     public void testGetAllBodyStyles() {
         BodyStyle bs = new BodyStyle();
         bs.setBodyStyle("Test Style");
+        bs.setBodyStyleId(1);
         bodyStyleDao.addBodyStyle(bs);
         
         BodyStyle bs2 = new BodyStyle();
-        bs.setBodyStyle("Test Style 2");
+        bs2.setBodyStyle("Test Style 2");
+        bs2.setBodyStyleId(2);
         bodyStyleDao.addBodyStyle(bs2);
         
         List<BodyStyle> styles = bodyStyleDao.getAllBodyStyles();
@@ -203,75 +205,5 @@ class BodyStyleDaoTest {
         fromDao = bodyStyleDao.getBodyStyleById(bs.getBodyStyleId());
         
         assertEquals(bs, fromDao);
-    }
-    
-    @Test
-    public void testDeleteBodyStyle() {
-        BodyStyle bs = new BodyStyle();
-        bs.setBodyStyle("Test Style");
-        bs = bodyStyleDao.addBodyStyle(bs);
-        
-        Role role = new Role();
-        role.setRole("admin");
-        role = roleDao.addRole(role);
-        
-        User user = new User();
-        user.setFirstName("Caleb");
-        user.setLastName("Diaz");
-        user.setEmail("email@example.com");
-        user.setPassword("password");
-        user.setRole(role);
-        
-        Make make = new Make();
-        make.setMake("Toyota");
-        make.setDateAdded(LocalDateTime.of(2012, Month.DECEMBER, 31, 11, 30, 45));
-        make.setUser(user);
-        
-        Model model = new Model();
-        model.setModel("Corolla");
-        model.setDateAdded(LocalDateTime.of(2012, Month.DECEMBER, 31, 11, 30, 45));
-        model.setUser(user);
-        model.setMake(make);
-        model = modelDao.addModel(model);
-        
-        Condition condition = new Condition();
-        condition.setCondition("used");
-        condition = conditionDao.addCondition(condition);
-        
-        Interior interior = new Interior();
-        interior.setInterior("red");
-        interior = interiorDao.addInterior(interior);
-        
-        Trans trans = new Trans();
-        trans.setTrans("automatic");
-        trans = transDao.addTrans(trans);
-        
-        Color color = new Color();
-        color.setColor("red");
-        color = colorDao.addColor(color);
-        
-        Vehicle v = new Vehicle();
-        v.setYear(LocalDateTime.of(2017, Month.JANUARY, 1, 00, 00, 00));
-        v.setSalePrice(new BigDecimal(17000));
-        v.setMSRP(new BigDecimal(21000));
-        v.setMileage(55000);
-        v.setVin("1HGBH41JXMN109186");
-        v.setDescription("Great car");
-        v.setPicturePath("test path");
-        v.setPurchased(false);
-        v.setFeatured(true);
-        v.setMake(make);
-        v.setModel(model);
-        v.setCondition(condition);
-        v.setBodyStyle(bs);
-        v.setInterior(interior);
-        v.setTrans(trans);
-        v.setColor(color);
-        v = vehicleDao.addVehicle(v);
-        
-        bodyStyleDao.deleteBodyStyleById(bs.getBodyStyleId());
-        
-        BodyStyle fromDao = bodyStyleDao.getBodyStyleById(bs.getBodyStyleId());
-        assertNull(fromDao);
     }
 }

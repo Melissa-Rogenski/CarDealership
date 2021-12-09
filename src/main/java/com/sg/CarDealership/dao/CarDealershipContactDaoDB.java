@@ -43,14 +43,14 @@ public class CarDealershipContactDaoDB implements CarDealershipContactDao {
     
     @Override
     public List<Contact> getAllContacts() {
-        final String SELECT_ALL_CONTACTS = "SELECT * FROM contact";
+        final String SELECT_ALL_CONTACTS = "SELECT * FROM `contact`";
         return jdbc.query(SELECT_ALL_CONTACTS, new ContactMapper());
     }
 
     @Override
     public Contact getContactById(int id) {
         try {
-            final String SELECT_CONTACT_BY_ID = "SELECT * FROM contact WHERE id = ?";
+            final String SELECT_CONTACT_BY_ID = "SELECT * FROM `contact` WHERE id = ?";
             return jdbc.queryForObject(SELECT_CONTACT_BY_ID, new ContactMapper(), id);
         } catch(DataAccessException ex) {
             return null;
@@ -60,7 +60,7 @@ public class CarDealershipContactDaoDB implements CarDealershipContactDao {
     @Override
     @Transactional
     public Contact addContact(Contact contact) {
-        final String INSERT_CONTACT = "INSERT INTO contact(`name`,message,phone,email) "
+        final String INSERT_CONTACT = "INSERT INTO `contact`(`name`,message,phone,email) "
                 + "VALUES(?,?,?,?)";
         jdbc.update(INSERT_CONTACT, 
                 contact.getName(),
@@ -74,7 +74,7 @@ public class CarDealershipContactDaoDB implements CarDealershipContactDao {
 
     @Override
     public boolean updateContact(Contact contact) {
-        final String UPDATE_CONTACT = "UPDATE contact SET name = ?, message = ?, phone = ?, email = ? "
+        final String UPDATE_CONTACT = "UPDATE `contact` SET name = ?, message = ?, phone = ?, email = ? "
                 + "WHERE id = ?";
         jdbc.update(UPDATE_CONTACT,
                 contact.getName(),
@@ -88,7 +88,7 @@ public class CarDealershipContactDaoDB implements CarDealershipContactDao {
     @Override
     @Transactional
     public void deleteContactById(int id) {
-        final String DELETE_CONTACT = "DELETE FROM contact WHERE id = ?";
+        final String DELETE_CONTACT = "DELETE FROM `contact` WHERE id = ?";
         jdbc.update(DELETE_CONTACT, id);
     }
     

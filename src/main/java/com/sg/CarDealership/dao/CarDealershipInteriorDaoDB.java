@@ -40,14 +40,14 @@ public class CarDealershipInteriorDaoDB implements CarDealershipInteriorDao {
     
     @Override
     public List<Interior> getAllInteriors() {
-        final String SELECT_ALL_INTERIORS = "SELECT * FROM interior";
+        final String SELECT_ALL_INTERIORS = "SELECT * FROM `interior`";
         return jdbc.query(SELECT_ALL_INTERIORS, new InteriorMapper());
     }
 
     @Override
     public Interior getInteriorById(int id) {
         try {
-            final String SELECT_INTERIOR_BY_ID = "SELECT * FROM interior WHERE id = ?";
+            final String SELECT_INTERIOR_BY_ID = "SELECT * FROM `interior` WHERE id = ?";
             return jdbc.queryForObject(SELECT_INTERIOR_BY_ID, new InteriorMapper(), id);
         } catch(DataAccessException ex) {
             return null;
@@ -57,7 +57,7 @@ public class CarDealershipInteriorDaoDB implements CarDealershipInteriorDao {
     @Override
     @Transactional
     public Interior addInterior(Interior interior) {
-        final String INSERT_INTERIOR = "INSERT INTO interior(interior) "
+        final String INSERT_INTERIOR = "INSERT INTO `interior`(interior) "
                 + "VALUES(?)";
         jdbc.update(INSERT_INTERIOR, 
                 interior.getInterior());
@@ -68,7 +68,7 @@ public class CarDealershipInteriorDaoDB implements CarDealershipInteriorDao {
 
     @Override
     public boolean updateInterior(Interior interior) {
-        final String UPDATE_INTERIOR = "UPDATE interior SET interior = ?"
+        final String UPDATE_INTERIOR = "UPDATE `interior` SET interior = ?"
                 + "WHERE id = ?";
         jdbc.update(UPDATE_INTERIOR,
                 interior.getInterior(),
@@ -79,11 +79,11 @@ public class CarDealershipInteriorDaoDB implements CarDealershipInteriorDao {
     @Override
     @Transactional
     public void deleteInteriorById(int id) {
-        final String DELETE_VEHICLE_INTERIOR = "DELETE FROM vehicle "
+        final String DELETE_VEHICLE_INTERIOR = "DELETE FROM `vehicle` "
                 + "WHERE interiorId = ?";
         jdbc.update(DELETE_VEHICLE_INTERIOR, id);
         
-        final String DELETE_INTERIOR = "DELETE FROM interior WHERE id = ?";
+        final String DELETE_INTERIOR = "DELETE FROM `interior` WHERE id = ?";
         jdbc.update(DELETE_INTERIOR, id);
     }
     

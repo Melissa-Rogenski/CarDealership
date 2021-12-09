@@ -40,14 +40,14 @@ public class CarDealershipColorDaoDB implements CarDealershipColorDao {
     
     @Override
     public List<Color> getAllColors() {
-        final String SELECT_ALL_COLORS = "SELECT * FROM color";
+        final String SELECT_ALL_COLORS = "SELECT * FROM `color`";
         return jdbc.query(SELECT_ALL_COLORS, new ColorMapper());
     }
 
     @Override
     public Color getColorById(int id) {
         try {
-            final String SELECT_COLOR_BY_ID = "SELECT * FROM color WHERE id = ?";
+            final String SELECT_COLOR_BY_ID = "SELECT * FROM `color` WHERE id = ?";
             return jdbc.queryForObject(SELECT_COLOR_BY_ID, new ColorMapper(), id);
         } catch(DataAccessException ex) {
             return null;
@@ -57,7 +57,7 @@ public class CarDealershipColorDaoDB implements CarDealershipColorDao {
     @Override
     @Transactional
     public Color addColor(Color color) {
-        final String INSERT_COLOR = "INSERT INTO color(color) "
+        final String INSERT_COLOR = "INSERT INTO `color`(color) "
                 + "VALUES(?)";
         jdbc.update(INSERT_COLOR, 
                 color.getColor());
@@ -68,7 +68,7 @@ public class CarDealershipColorDaoDB implements CarDealershipColorDao {
 
     @Override
     public boolean updateColor(Color color) {
-        final String UPDATE_COLOR = "UPDATE color SET color = ?"
+        final String UPDATE_COLOR = "UPDATE `color` SET `color` = ?"
                 + "WHERE id = ?";
         jdbc.update(UPDATE_COLOR,
                 color.getColor(),
@@ -79,11 +79,11 @@ public class CarDealershipColorDaoDB implements CarDealershipColorDao {
     @Override
     @Transactional
     public void deleteColorById(int id) {
-        final String DELETE_VEHICLE_COLOR = "DELETE FROM vehicle "
+        final String DELETE_VEHICLE_COLOR = "DELETE FROM `vehicle` "
                 + "WHERE colorId = ?";
         jdbc.update(DELETE_VEHICLE_COLOR, id);
         
-        final String DELETE_COLOR = "DELETE FROM color WHERE id = ?";
+        final String DELETE_COLOR = "DELETE FROM `color` WHERE id = ?";
         jdbc.update(DELETE_COLOR, id);
     }
     

@@ -28,6 +28,7 @@ import com.sg.CarDealership.model.User;
 import com.sg.CarDealership.model.Vehicle;
 import com.sg.CarDealership.service.CarDealershipServiceLayer;
 import com.sg.CarDealership.service.InvalidContactException;
+import com.sg.CarDealership.service.InvalidVehicleException;
 import com.sg.CarDealership.service.InventoryReport;
 import com.sg.CarDealership.service.PasswordChangeContext;
 import com.sg.CarDealership.service.ReportQueryContext;
@@ -126,12 +127,26 @@ public class CarDealershipController {
     
     @GetMapping("/admin/vehicles")
     public ResponseEntity<List<Vehicle>> getAdminVehicles(@RequestBody VehicleQueryContext query){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        query.setConditionId(0);
+        List<Vehicle> results = service.getVehicles(query);
+        if (results == null) {
+            return new ResponseEntity("There was an error processing your request.", HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+        return ResponseEntity.ok(results);
     }
     
     @PostMapping("/admin/addvehicle")
-    public ResponseEntity addVehicle(@RequestBody VehicleRequestContext vehicleRequest){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public ResponseEntity addVehicle(@RequestBody VehicleRequestContext vehicleRequest) throws InvalidVehicleException {
+        Vehicle result = null;
+        try{
+            result = service.addVehicle(vehicleRequest);
+        } catch (InvalidVehicleException e){
+            return new ResponseEntity(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+        if (result == null) {
+            return new ResponseEntity("There was an error processing your request.", HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+        return ResponseEntity.ok(result);
     }
 
     @PutMapping("/admin/editvehicle/{id}")

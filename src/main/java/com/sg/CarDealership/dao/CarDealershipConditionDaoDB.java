@@ -47,9 +47,11 @@ public class CarDealershipConditionDaoDB implements CarDealershipConditionDao {
     @Override
     public Condition getConditionById(int id) {
         try {
-            final String SELECT_CONDITION_BY_ID = "SELECT * FROM condition WHERE id = ?";
+            final String SELECT_CONDITION_BY_ID = "SELECT * FROM `condition` WHERE id = ? ";
             return jdbc.queryForObject(SELECT_CONDITION_BY_ID, new ConditionMapper(), id);
         } catch(DataAccessException ex) {
+            System.out.println("Error connecting to database");
+            System.out.println(ex.getMessage());
             return null;
         }
     }

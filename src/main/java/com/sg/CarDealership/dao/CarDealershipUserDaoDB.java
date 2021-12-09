@@ -44,15 +44,15 @@ public class CarDealershipUserDaoDB implements CarDealershipUserDao {
     }
     
     private Role getRoleForUser(User user) {
-        final String SELECT_ROLE_FOR_USER = "SELECT r.* FROM role r "
-                + "JOIN user u ON r.id = u.roleId WHERE u.id = ?";
+        final String SELECT_ROLE_FOR_USER = "SELECT r.* FROM `role` r "
+                + "JOIN `user` u ON r.id = u.roleId WHERE u.id = ?";
         return jdbc.queryForObject(SELECT_ROLE_FOR_USER, new RoleMapper(), 
                 user.getUserId());
     }
     
     @Override
     public List<User> getAllUsers() {
-        final String SELECT_ALL_USERS = "SELECT * FROM user";
+        final String SELECT_ALL_USERS = "SELECT * FROM `user`";
         List<User> users = jdbc.query(SELECT_ALL_USERS, new UserMapper());
         
         addRoleToUsers(users);
@@ -69,7 +69,7 @@ public class CarDealershipUserDaoDB implements CarDealershipUserDao {
     @Override
     public User getUserById(int id) {
         try {
-            final String SELECT_USER_BY_ID = "SELECT * FROM user WHERE id = ?";
+            final String SELECT_USER_BY_ID = "SELECT * FROM `user` WHERE id = ?";
             User user = jdbc.queryForObject(SELECT_USER_BY_ID, 
                     new UserMapper(), id);
             user.setRole(getRoleForUser(user));
@@ -82,7 +82,7 @@ public class CarDealershipUserDaoDB implements CarDealershipUserDao {
     @Override
     @Transactional
     public User addUser(User user) {
-        final String INSERT_USER = "INSERT INTO user(firstName, lastName, email, password, roleId) VALUES(?,?,?,?,?)";
+        final String INSERT_USER = "INSERT INTO `user`(firstName, lastName, email, password, roleId) VALUES(?,?,?,?,?)";
         jdbc.update(INSERT_USER,
                 user.getFirstName(),
                 user.getLastName(),
@@ -97,8 +97,8 @@ public class CarDealershipUserDaoDB implements CarDealershipUserDao {
 
     @Override
     public boolean updateUser(User user) {
-        final String UPDATE_USER = "UPDATE user "
-                + "SET firstName = ?, lastName = ?, email = ?, password = ?, roleId = ? WHERE id = ?";
+        final String UPDATE_USER = "UPDATE `user` "
+                + "SET firstName = ?, lastName = ?, email = ?, `password` = ?, roleId = ? WHERE id = ?";
         jdbc.update(UPDATE_USER,
                 user.getFirstName(),
                 user.getLastName(),
@@ -122,7 +122,7 @@ public class CarDealershipUserDaoDB implements CarDealershipUserDao {
         final String DELETE_MAKE_USER = "DELETE FROM make WHERE userId = ?";
         jdbc.update(DELETE_MAKE_USER, id);
         
-        final String DELETE_USER = "DELETE FROM user WHERE id = ?";
+        final String DELETE_USER = "DELETE FROM `user` WHERE id = ?";
         jdbc.update(DELETE_USER, id);
     }
     

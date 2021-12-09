@@ -9,6 +9,7 @@ import com.sg.CarDealership.dao.CarDealershipMakeDaoDB.MakeMapper;
 import com.sg.CarDealership.dao.CarDealershipUserDaoDB.UserMapper;
 import com.sg.CarDealership.model.Make;
 import com.sg.CarDealership.model.Model;
+import com.sg.CarDealership.model.Role;
 import com.sg.CarDealership.model.User;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -45,17 +46,37 @@ public class CarDealershipModelDaoDB implements CarDealershipModelDao {
     }
     
     private User getUserForModel(Model model) {
-        final String SELECT_USER_FOR_MODEL = "SELECT u.* FROM user u "
+        final String SELECT_USER_FOR_MODEL = "SELECT u.* FROM `user` u "
                 + "JOIN model m ON u.id = m.userId WHERE m.id = ?";
-        return jdbc.queryForObject(SELECT_USER_FOR_MODEL, new UserMapper(), 
+        User u = jdbc.queryForObject(SELECT_USER_FOR_MODEL, new UserMapper(), 
                 model.getModelId());
+        u.setRole(getRoleForUser(u));
+        return u;
     }
     
     private Make getMakeForModel(Model model) {
         final String SELECT_MAKE_FOR_MODEL = "SELECT ma.* FROM make ma "
                 + "JOIN model mo ON ma.id = mo.makeId WHERE mo.id = ?";
-        return jdbc.queryForObject(SELECT_MAKE_FOR_MODEL, new MakeMapper(), 
+        Make m =  jdbc.queryForObject(SELECT_MAKE_FOR_MODEL, new MakeMapper(), 
                 model.getModelId());
+        m.setUser(getUserForMake(m));
+        return m;
+    }
+    
+    private User getUserForMake(Make make) {
+        final String SELECT_USER_FOR_MAKE = "SELECT u.* FROM `user` u "
+                + "JOIN make m ON u.id = m.userId WHERE m.id = ?";
+        User u = jdbc.queryForObject(SELECT_USER_FOR_MAKE, new UserMapper(), 
+                make.getMakeId());
+        u.setRole(getRoleForUser(u));
+        return u;
+    }
+    
+    private Role getRoleForUser(User user) {
+        final String SELECT_ROLE_FOR_USER = "SELECT r.* FROM `role` r "
+                + "JOIN `user` u ON r.id = u.roleId WHERE u.id = ?";
+        return jdbc.queryForObject(SELECT_ROLE_FOR_USER, new CarDealershipRoleDaoDB.RoleMapper(), 
+                user.getUserId());
     }
     
     private void addUserToModels(List<Model> models) {

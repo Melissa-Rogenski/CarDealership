@@ -40,14 +40,14 @@ public class CarDealershipRoleDaoDB implements CarDealershipRoleDao {
     
     @Override
     public List<Role> getAllRoles() {
-        final String SELECT_ALL_ROLES = "SELECT * FROM role";
+        final String SELECT_ALL_ROLES = "SELECT * FROM `role`";
         return jdbc.query(SELECT_ALL_ROLES, new RoleMapper());
     }
 
     @Override
     public Role getRoleById(int id) {
     try {
-            final String SELECT_ROLE_BY_ID = "SELECT * FROM role WHERE id = ?";
+            final String SELECT_ROLE_BY_ID = "SELECT * FROM `role` WHERE id = ? ";
             return jdbc.queryForObject(SELECT_ROLE_BY_ID, new RoleMapper(), id);
         } catch(DataAccessException ex) {
             return null;
@@ -57,7 +57,7 @@ public class CarDealershipRoleDaoDB implements CarDealershipRoleDao {
     @Override
     @Transactional
     public Role addRole(Role role) {
-        final String INSERT_ROLE = "INSERT INTO role(role) "
+        final String INSERT_ROLE = "INSERT INTO `role`(role) "
                 + "VALUES(?)";
         jdbc.update(INSERT_ROLE, 
                 role.getRole());
@@ -68,8 +68,8 @@ public class CarDealershipRoleDaoDB implements CarDealershipRoleDao {
 
     @Override
     public boolean updateRole(Role role) {
-        final String UPDATE_ROLE = "UPDATE role SET role = ?"
-                + "WHERE id = ?";
+        final String UPDATE_ROLE = "UPDATE `role` SET `role` = ? "
+                + "WHERE id = ? ";
         jdbc.update(UPDATE_ROLE,
                 role.getRole(),
                 role.getRoleId());
@@ -79,11 +79,11 @@ public class CarDealershipRoleDaoDB implements CarDealershipRoleDao {
     @Override
     @Transactional
     public void deleteRoleById(int id) {
-        final String DELETE_USER_ROLE = "DELETE FROM user "
+        final String DELETE_USER_ROLE = "DELETE FROM `user` "
                 + "WHERE roleId = ?";
         jdbc.update(DELETE_USER_ROLE, id);
         
-        final String DELETE_ROLE = "DELETE FROM role WHERE id = ?";
+        final String DELETE_ROLE = "DELETE FROM `role` WHERE id = ?";
         jdbc.update(DELETE_ROLE, id);
     }
     

@@ -7,6 +7,7 @@ package com.sg.CarDealership.dao;
 
 import com.sg.CarDealership.dao.CarDealershipUserDaoDB.UserMapper;
 import com.sg.CarDealership.model.Make;
+import com.sg.CarDealership.model.Role;
 import com.sg.CarDealership.model.User;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -43,10 +44,19 @@ public class CarDealershipMakeDaoDB implements CarDealershipMakeDao {
     }
     
     private User getUserForMake(Make make) {
-        final String SELECT_USER_FOR_MAKE = "SELECT u.* FROM user u "
-                + "JOIN make m ON u.id = m.makeId WHERE m.id = ?";
-        return jdbc.queryForObject(SELECT_USER_FOR_MAKE, new UserMapper(), 
+        final String SELECT_USER_FOR_MAKE = "SELECT u.* FROM `user` u "
+                + "JOIN make m ON u.id = m.userId WHERE m.id = ?";
+        User u = jdbc.queryForObject(SELECT_USER_FOR_MAKE, new UserMapper(), 
                 make.getMakeId());
+        u.setRole(getRoleForUser(u));
+        return u;
+    }
+    
+    private Role getRoleForUser(User user) {
+        final String SELECT_ROLE_FOR_USER = "SELECT r.* FROM `role` r "
+                + "JOIN `user` u ON r.id = u.roleId WHERE u.id = ?";
+        return jdbc.queryForObject(SELECT_ROLE_FOR_USER, new CarDealershipRoleDaoDB.RoleMapper(), 
+                user.getUserId());
     }
     
     @Override
@@ -68,12 +78,14 @@ public class CarDealershipMakeDaoDB implements CarDealershipMakeDao {
     @Override
     public Make getMakeById(int id) {
         try {
-            final String SELECT_MAKE_BY_ID = "SELECT * FROM make WHERE id = ?";
+            final String SELECT_MAKE_BY_ID = "SELECT * FROM make WHERE id = ? ";
             Make make = jdbc.queryForObject(SELECT_MAKE_BY_ID, 
                     new MakeMapper(), id);
             make.setUser(getUserForMake(make));
             return make;
         } catch(DataAccessException ex) {
+            System.out.println("Error connecting to database");
+            System.out.println(ex.getMessage());
             return null;
         }
     }

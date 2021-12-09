@@ -148,10 +148,13 @@ public class CarDealershipServiceLayerImpl implements CarDealershipServiceLayer 
         Vehicle vehicle = new Vehicle();
         vehicle.setYear(request.getYear());
         vehicle.setSalePrice(request.getSalePrice());
+        vehicle.setMSRP(request.getMSRP());
         vehicle.setMileage(request.getMileage());
         vehicle.setVin(request.getVin());
         vehicle.setDescription(request.getDescription());
         vehicle.setPicturePath(request.getPicturePath());
+        vehicle.setPurchased(false);
+        vehicle.setFeatured(false);
         vehicle.setMake(getMakeFromRequest(request));
         vehicle.setModel(getModelFromRequest(request));
         vehicle.setCondition(getConditionFromRequest(request));
@@ -355,7 +358,7 @@ public class CarDealershipServiceLayerImpl implements CarDealershipServiceLayer 
     private void validateVehicleRequest(VehicleRequestContext request) throws InvalidVehicleException {
         // Validate Date
         LocalDateTime date = request.getYear();
-        LocalDateTime minDate = LocalDateTime.parse("2000-01-01");
+        LocalDateTime minDate = LocalDateTime.parse("2000-01-01T00:00:00");
         LocalDateTime maxDate = LocalDateTime.now().plusYears(1);
         
         if(date.compareTo(minDate) < 0 || date.compareTo(maxDate) > 0){

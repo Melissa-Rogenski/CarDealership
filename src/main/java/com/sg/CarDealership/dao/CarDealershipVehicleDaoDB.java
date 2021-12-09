@@ -110,8 +110,8 @@ public class CarDealershipVehicleDaoDB implements CarDealershipVehicleDao {
 
     @Override
     public Vehicle addVehicle(Vehicle vehicle) {
-        final String sql = "INSERT INTO vehicle(year, salePrice, msrp, mileage, vin, description"
-                + "picture, purchased, featured, makeId, modelId, conditionId, bodyStyleId,"
+        final String sql = "INSERT INTO vehicle(year, salePrice, msrp, mileage, vin, description, "
+                + "picture, purchased, featured, makeId, modelId, conditionId, bodyStyleId, "
                 + "interiorId, transId, colorId) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 

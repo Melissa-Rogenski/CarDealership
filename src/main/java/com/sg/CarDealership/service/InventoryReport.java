@@ -4,6 +4,8 @@
  */
 package com.sg.CarDealership.service;
 
+import com.sg.CarDealership.model.Make;
+import com.sg.CarDealership.model.Model;
 import com.sg.CarDealership.model.Vehicle;
 import java.math.BigDecimal;
 
@@ -13,9 +15,27 @@ import java.math.BigDecimal;
  */
 public class InventoryReport {
     
+    private Make make;
+    private Model model;
     private int count;
     private BigDecimal stockValue;
     private Vehicle vehicle;
+
+    public Make getMake() {
+        return make;
+    }
+
+    public void setMake(Make make) {
+        this.make = make;
+    }
+
+    public Model getModel() {
+        return model;
+    }
+
+    public void setModel(Model model) {
+        this.model = model;
+    }
 
     public int getCount() {
         return count;

@@ -18,7 +18,9 @@ import com.sg.CarDealership.model.Condition;
 import com.sg.CarDealership.model.Interior;
 import com.sg.CarDealership.model.Make;
 import com.sg.CarDealership.model.Model;
+import com.sg.CarDealership.model.Role;
 import com.sg.CarDealership.model.Trans;
+import com.sg.CarDealership.model.User;
 import com.sg.CarDealership.model.Vehicle;
 import com.sg.CarDealership.service.VehicleQueryContext;
 import java.sql.Connection;
@@ -159,10 +161,10 @@ public class CarDealershipVehicleDaoDB implements CarDealershipVehicleDao {
 
     @Override
     public boolean updateVehicle(Vehicle vehicle) {
-        final String sql = "UPDATE vehicle SET"
-                + "year = ?, salePrice = ?, msrp = ?, mileage = ?, vin = ?, description = ?,"
-                + "picture = ?, purchased = ?, featured = ?, makeId = ?, modelId = ?,"
-                + "conditionId = ?, bodyStyleId = ?, interiorId = ?, transId = ?, colorId = ?"
+        final String sql = "UPDATE vehicle SET "
+                + "year = ?, salePrice = ?, msrp = ?, mileage = ?, vin = ?, description = ?, "
+                + "picture = ?, purchased = ?, featured = ?, makeId = ?, modelId = ?, "
+                + "conditionId = ?, bodyStyleId = ?, interiorId = ?, transId = ?, colorId = ? "
                 + "WHERE id = ?;";
         
         return jdbcTemplate.update(sql,
@@ -200,15 +202,54 @@ public class CarDealershipVehicleDaoDB implements CarDealershipVehicleDao {
     private Make getMakeForVehicle(Vehicle vehicle){
         final String SELECT_MAKE_FOR_VEHICLE = "SELECT m.* FROM make m "
                 + "JOIN vehicle v ON m.id = v.makeId WHERE v.id = ?";
-        return jdbcTemplate.queryForObject(SELECT_MAKE_FOR_VEHICLE, new MakeMapper(), 
+        Make m =  jdbcTemplate.queryForObject(SELECT_MAKE_FOR_VEHICLE, new MakeMapper(), 
                 vehicle.getVehicleId());
+        m.setUser(getUserForMake(m));
+        return m;
     }
     
     private Model getModelForVehicle(Vehicle vehicle){
         final String SELECT_MODEL_FOR_VEHICLE = "SELECT m.* FROM model m "
                 + "JOIN vehicle v ON m.id = v.modelId WHERE v.id = ?";
-        return jdbcTemplate.queryForObject(SELECT_MODEL_FOR_VEHICLE, new ModelMapper(), 
+        Model m = jdbcTemplate.queryForObject(SELECT_MODEL_FOR_VEHICLE, new ModelMapper(), 
                 vehicle.getVehicleId());
+        m.setMake(getMakeForModel(m));
+        m.setUser(getUserForModel(m));
+        return m;
+    }
+    
+    private User getUserForModel(Model model) {
+        final String SELECT_USER_FOR_MODEL = "SELECT u.* FROM `user` u "
+                + "JOIN model m ON u.id = m.userId WHERE m.id = ?";
+        User u = jdbcTemplate.queryForObject(SELECT_USER_FOR_MODEL, new CarDealershipUserDaoDB.UserMapper(), 
+                model.getModelId());
+        u.setRole(getRoleForUser(u));
+        return u;
+    }
+    
+    private Make getMakeForModel(Model model) {
+        final String SELECT_MAKE_FOR_MODEL = "SELECT ma.* FROM make ma "
+                + "JOIN model mo ON ma.id = mo.makeId WHERE mo.id = ?";
+        Make m =  jdbcTemplate.queryForObject(SELECT_MAKE_FOR_MODEL, new MakeMapper(), 
+                model.getModelId());
+        m.setUser(getUserForMake(m));
+        return m;
+    }
+    
+    private User getUserForMake(Make make) {
+        final String SELECT_USER_FOR_MAKE = "SELECT u.* FROM `user` u "
+                + "JOIN make m ON u.id = m.userId WHERE m.id = ?";
+        User u = jdbcTemplate.queryForObject(SELECT_USER_FOR_MAKE, new CarDealershipUserDaoDB.UserMapper(), 
+                make.getMakeId());
+        u.setRole(getRoleForUser(u));
+        return u;
+    }
+    
+    private Role getRoleForUser(User user) {
+        final String SELECT_ROLE_FOR_USER = "SELECT r.* FROM `role` r "
+                + "JOIN `user` u ON r.id = u.roleId WHERE u.id = ?";
+        return jdbcTemplate.queryForObject(SELECT_ROLE_FOR_USER, new CarDealershipRoleDaoDB.RoleMapper(), 
+                user.getUserId());
     }
     
     private Condition getConditionForVehicle(Vehicle vehicle){

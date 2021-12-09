@@ -5,30 +5,16 @@
  */
 package com.sg.CarDealership.dao;
 
-import com.sg.CarDealership.TestApplicationConfiguration;
-import com.sg.CarDealership.model.BodyStyle;
-import com.sg.CarDealership.model.Color;
-import com.sg.CarDealership.model.Condition;
-import com.sg.CarDealership.model.Contact;
-import com.sg.CarDealership.model.Interior;
-import com.sg.CarDealership.model.Make;
-import com.sg.CarDealership.model.Model;
-import com.sg.CarDealership.model.PurchaseType;
-import com.sg.CarDealership.model.Role;
-import com.sg.CarDealership.model.Sale;
-import com.sg.CarDealership.model.Special;
-import com.sg.CarDealership.model.State;
-import com.sg.CarDealership.model.Trans;
-import com.sg.CarDealership.model.User;
-import com.sg.CarDealership.model.Vehicle;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNull;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,13 +22,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.sg.CarDealership.TestApplicationConfiguration;
+import com.sg.CarDealership.model.*;
+
+
 /**
  *
  * @author mroge
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = TestApplicationConfiguration.class)
-class BodyStyleDaoTest {
+public class BodyStyleDaoTest {
     @Autowired
     CarDealershipBodyStyleDao bodyStyleDao;
     @Autowired

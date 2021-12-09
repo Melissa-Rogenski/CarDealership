@@ -171,8 +171,10 @@ public class CarDealershipServiceLayerImpl implements CarDealershipServiceLayer 
         validateVehicleRequest(request);
         
         Vehicle vehicle = new Vehicle();
+        vehicle.setVehicleId(request.getVehicleId());
         vehicle.setYear(request.getYear());
         vehicle.setSalePrice(request.getSalePrice());
+        vehicle.setMSRP(request.getMSRP());
         vehicle.setMileage(request.getMileage());
         vehicle.setVin(request.getVin());
         vehicle.setDescription(request.getDescription());
@@ -226,7 +228,7 @@ public class CarDealershipServiceLayerImpl implements CarDealershipServiceLayer 
         user.setPassword(request.getPassword());
         user.setRole(getRoleFromRequest(request));
         
-        return true;
+        return userDao.updateUser(user);
     }
 
     @Override
@@ -248,19 +250,39 @@ public class CarDealershipServiceLayerImpl implements CarDealershipServiceLayer 
     }
 
     @Override
-    public Make addMake(Make make, int userId) {
-        make.setMakeId(0);
-        make.setUser(userDao.getUserById(userId));
-        return makeDao.addMake(make);
+    public Make addMake(MakeRequestContext request) {
+        User user = userDao.getUserById(request.getUserId());
+        
+        if(user == null){
+            return null;
+        } else if(user.getRole().getRoleId() == 3){
+            Make make = new Make();
+            make.setDateAdded(LocalDateTime.now());
+            make.setMake(request.getMake());
+            make.setUser(userDao.getUserById(request.getUserId()));
+            return makeDao.addMake(make);
+        } else {
+            return null;
+        }
     }
 
     @Override
-    public Model addModel(Model model, int userId, int makeId) {
-        model.setModelId(0);
-        model.setUser(userDao.getUserById(userId));
-        model.setMake(makeDao.getMakeById(makeId));
+    public Model addModel(ModelRequestContext request) {
+        User user = userDao.getUserById(request.getUserId());
         
-        return modelDao.addModel(model);
+        if(user == null){
+            return null;
+        } else if(user.getRole().getRoleId() == 3){
+            Model model = new Model();
+            model.setModel(request.getModel());
+            model.setDateAdded(LocalDateTime.now());
+            model.setUser(userDao.getUserById(request.getUserId()));
+            model.setMake(makeDao.getMakeById(request.getMakeId()));
+
+            return modelDao.addModel(model);
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -288,18 +310,22 @@ public class CarDealershipServiceLayerImpl implements CarDealershipServiceLayer 
                 .filter((s) -> (s.getPurchaseDate().compareTo(query.getMaxDate()) <= 1))
                 .collect(Collectors.toList());
         
-        List<User> users = filtered.stream() // get list of users with sales
+        List<User> usersSales = filtered.stream() // get list of users with sales
                 .map((s) -> s.getUser())
                 .collect(Collectors.toList());
+        
+        List<User> users = userDao.getAllUsers(); // get list of all users
         
         User user = userDao.getUserById(query.getUserId()); // get user IDed by query, if any
         
         if(query.getUserId() == 0) {
             users.stream()
-                .forEach((u) -> {
-                    reports.add(generateSalesReportForUser(filtered, u));
-                });
-        } else if(users.contains(user)){
+                    .forEach((u) -> {
+                        if(usersSales.contains(u)){
+                            reports.add(generateSalesReportForUser(filtered, u));
+                        }
+                    });
+        } else if(usersSales.contains(user)){
             reports.add(generateSalesReportForUser(filtered, user));
         }
         
@@ -310,11 +336,17 @@ public class CarDealershipServiceLayerImpl implements CarDealershipServiceLayer 
     public List<InventoryReport> getInventoryReport() {
         List<InventoryReport> reports = new ArrayList<>(); // List of inventory reports
         
-        vehicleDao.getAllVehicles().stream() // List of all models of vehicles in inventory
+        List<Model> models = vehicleDao.getAllVehicles().stream() // List of all models of vehicles in inventory
                 .map((v) -> v.getModel())
+                .collect(Collectors.toList());
+        
+        modelDao.getAllModels().stream()
                 .forEach((m) -> {
-                    reports.add(generateInventoryReportForModel(m));
+                    if(models.contains(m)){
+                        reports.add(generateInventoryReportForModel(m));
+                    }
                 });
+        
         
         return reports;
     }
@@ -331,14 +363,17 @@ public class CarDealershipServiceLayerImpl implements CarDealershipServiceLayer 
                 .filter((s) -> s.getUser().getUserId() == user.getUserId())
                 .collect(Collectors.toList()).size());
         
+        report.setUser(user);
         return report;
     }
     
     private InventoryReport generateInventoryReportForModel(Model model){
         InventoryReport report = new InventoryReport();
+        report.setModel(model);
+        report.setMake(model.getMake());
         
         List<Vehicle> modelStock = vehicleDao.getAllVehicles().stream()
-                .filter((v) -> v.getModel().equals(model))
+                .filter((v) -> v.getModel().getModelId() == model.getModelId())
                 .collect(Collectors.toList());
         
         report.setCount(modelStock.size());

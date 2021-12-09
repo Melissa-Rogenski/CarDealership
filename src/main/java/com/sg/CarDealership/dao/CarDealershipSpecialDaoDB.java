@@ -82,7 +82,7 @@ public class CarDealershipSpecialDaoDB implements CarDealershipSpecialDao {
     @Override
     @Transactional
     public void deleteSpecialById(int id) {
-        final String DELETE_SPECIAL = "DELETE FROM special WHERE id = ?";
+        final String DELETE_SPECIAL = "DELETE FROM special WHERE id = ? ";
         jdbc.update(DELETE_SPECIAL, id);
     }
     

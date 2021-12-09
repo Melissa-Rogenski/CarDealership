@@ -10,6 +10,7 @@ import com.sg.CarDealership.dao.CarDealershipStateDaoDB.StateMapper;
 import com.sg.CarDealership.dao.CarDealershipUserDaoDB.UserMapper;
 import com.sg.CarDealership.dao.CarDealershipVehicleDaoDB.VehicleMapper;
 import com.sg.CarDealership.model.PurchaseType;
+import com.sg.CarDealership.model.Role;
 import com.sg.CarDealership.model.Sale;
 import com.sg.CarDealership.model.State;
 import com.sg.CarDealership.model.User;
@@ -78,8 +79,17 @@ public class CarDealershipSaleDaoDB implements CarDealershipSaleDao {
     private User getUserForSale(Sale sale) {
         final String SELECT_USER_FOR_SALE = "SELECT u.* FROM user u "
                 + "JOIN sale sa ON u.id = sa.userId WHERE sa.id = ?";
-        return jdbc.queryForObject(SELECT_USER_FOR_SALE, new UserMapper(), 
+        User u = jdbc.queryForObject(SELECT_USER_FOR_SALE, new UserMapper(), 
                 sale.getSaleId());
+        u.setRole(getRoleForUser(u));
+        return u;
+    }
+    
+    private Role getRoleForUser(User user) {
+        final String SELECT_ROLE_FOR_USER = "SELECT r.* FROM `role` r "
+                + "JOIN `user` u ON r.id = u.roleId WHERE u.id = ?";
+        return jdbc.queryForObject(SELECT_ROLE_FOR_USER, new CarDealershipRoleDaoDB.RoleMapper(), 
+                user.getUserId());
     }
     
     private void addVehicleToSales(List<Sale> sales) {

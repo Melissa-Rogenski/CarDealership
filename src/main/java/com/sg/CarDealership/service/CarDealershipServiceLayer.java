@@ -34,8 +34,8 @@ public interface CarDealershipServiceLayer {
     boolean updatePassword(PasswordChangeContext pass) throws PasswordsDoNotMatchException;
     List<Make> getMakes();
     List<Model> getModels();
-    Make addMake(Make make, int userId);
-    Model addModel(Model model, int userId, int makeId);
+    Make addMake(MakeRequestContext request);
+    Model addModel(ModelRequestContext request);
     Special addSpecial(Special special);
     boolean deleteSpecialById(int id);
     List<SalesReport> getSalesReport(ReportQueryContext query);

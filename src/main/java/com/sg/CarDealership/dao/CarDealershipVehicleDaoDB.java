@@ -69,7 +69,7 @@ public class CarDealershipVehicleDaoDB implements CarDealershipVehicleDao {
         if(!query.getSearchBar().isEmpty()){
             final String SELECT_ALL_VEHICLES_BY_QUERY = "SELECT v.* FROM vehicle v "
                     + "JOIN make m ON (m.make LIKE ? AND m.Id = v.makeId) "
-                    + "JOIN model mo ON (mo.model LIKE ? AND mo.Id = v.modelId) "
+                    + "LEFT JOIN model mo ON (mo.model LIKE ? AND mo.Id = v.modelId) "
                     + "WHERE (year BETWEEN ? AND ? ) "
                     + "AND (msrp BETWEEN ? AND ? ) "
                     + "AND (conditionId = ? )";

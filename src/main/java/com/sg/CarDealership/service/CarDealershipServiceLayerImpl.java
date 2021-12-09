@@ -126,7 +126,7 @@ public class CarDealershipServiceLayerImpl implements CarDealershipServiceLayer 
         Sale sale = new Sale();
         sale.setBuyerName(request.getBuyerName());
         sale.setPurchasePrice(request.getPurchasePrice());
-        sale.setPurchaseDate(request.getPurchaseDate());
+        sale.setPurchaseDate(LocalDate.now());
         sale.setEmail(request.getEmail());
         sale.setPhone(request.getPhone());
         sale.setStreet1(request.getStreet1());

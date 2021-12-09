@@ -138,6 +138,11 @@ public class CarDealershipServiceLayerImpl implements CarDealershipServiceLayer 
         sale.setVehicle(getVehicleFromRequest(request));
         sale.setUser(getUserFromRequest(request));
         
+        Vehicle vehicle = vehicleDao.getVehicleById(request.getVehicleId());
+        vehicle.setPurchased(true);
+        
+        vehicleDao.updateVehicle(vehicle);
+        
         return saleDao.addSale(sale);
     }
 
